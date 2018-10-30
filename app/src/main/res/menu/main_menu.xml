@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="100"
+        android:title="Refresh"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"/>
+    <item
+        android:id="@+id/action_login"
+        android:title="Login"/>
+    <item
+        android:id="@+id/action_sign_up"
+        android:title="Sign up"/>
+
+    <item
+        android:id="@+id/action_profile"
+        android:title="Profile"/>
+
+    <item
+        android:id="@+id/action_my_closet"
+        android:title="My Closet"/>
+
+    <item
+        android:id="@+id/action_inbox_outbox"
+        android:title="Inbox/Outbox"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:title="Search"/>
+</menu>

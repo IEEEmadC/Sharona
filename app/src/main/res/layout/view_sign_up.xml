@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white_snow"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:paddingEnd="16dp"
+              android:paddingStart="16dp">
+
+    <TextView
+        android:id="@+id/sign_up_status_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fontPath="fonts/f1.ttf"
+        android:text="STATUS"
+        tools:ignore="MissingPrefix"/>
+
+    <LinearLayout
+        android:id="@+id/sign_up_sign_up_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/sign_up_username_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="your username"
+            android:inputType="text"
+            fontPath="fonts/f2.TTF"
+
+            android:maxLines="1"
+            tools:ignore="MissingPrefix"/>
+
+        <EditText
+            android:id="@+id/sign_up_email_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="your email"
+            fontPath="fonts/f1.TTF"
+
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            tools:ignore="MissingPrefix"/>
+
+        <EditText
+            android:id="@+id/sign_up_national_id_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="your national id"
+            android:inputType="number"
+            fontPath="fonts/f2.TTF"
+
+            android:maxLines="1"
+            tools:ignore="MissingPrefix"/>
+
+        <EditText
+            android:id="@+id/sign_up_password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="password"
+            fontPath="fonts/f1.TTF"
+
+            android:inputType="textPassword"
+            android:maxLines="1"
+            tools:ignore="MissingPrefix"/>
+
+        <Button
+            android:id="@+id/sign_up_sign_up_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SIGN UP"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            fontPath="fonts/f1.TTF"
+
+            android:text="Already registered?"
+            tools:ignore="MissingPrefix"/>
+
+        <TextView
+            android:id="@+id/sign_up_login_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fontPath="fonts/f1.TTF"
+            android:text="Login here!"
+
+            android:textColor="@android:color/holo_blue_dark"
+            tools:ignore="MissingPrefix"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

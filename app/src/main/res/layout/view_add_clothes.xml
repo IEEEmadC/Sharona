@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white_snow"
+              android:gravity="center"
+              android:orientation="vertical">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/add_clothes_details_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <TextView
+                android:id="@+id/add_clothes_status_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="status"
+                android:textSize="@dimen/text_size_normal"
+                fontPath="fonts/f1.TTF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingPrefix"/>
+
+            <TextView
+                android:id="@+id/add_clothes_details_note_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STEP 1: \n Fill in clothes detail"
+                android:textSize="@dimen/text_size_normal"
+                fontPath="fonts/f2.TTF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingPrefix"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_clothes_username_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                fontPath="fonts/f2.TTF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_details_note_text_view">
+
+                <EditText
+                    android:id="@+id/add_clothes_username_edit_text"
+                    android:layout_width="match_parent"
+                    fontPath="fonts/f2.TTF"
+                    android:layout_height="wrap_content"
+                    android:hint="username"
+                    tools:ignore="MissingPrefix"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_clothes_type_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                fontPath="fonts/f2.TTF"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_username_text_input_layout">
+
+                <EditText
+                    android:id="@+id/add_clothes_type_edit_text"
+                    android:layout_width="match_parent"
+                    fontPath="fonts/f2.TTF"
+
+                    android:layout_height="wrap_content"
+                    android:hint="Type"
+                    tools:ignore="MissingPrefix"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_clothes_brand_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"                fontPath="fonts/f2.TTF"
+
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_type_text_input_layout">
+
+                <EditText
+                    android:id="@+id/add_clothes_brand_edit_text"
+                    android:layout_width="match_parent"
+                    fontPath="fonts/f2.TTF"
+
+                    android:layout_height="wrap_content"
+                    android:hint="Brand"
+                    tools:ignore="MissingPrefix"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_clothes_size_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_brand_text_input_layout">
+
+                <EditText
+                    android:id="@+id/add_clothes_size_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Size"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_clothes_original_price_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_size_text_input_layout">
+
+                <EditText
+                    android:id="@+id/add_clothes_original_price_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Original Price"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_clothes_rental_price_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_original_price_text_input_layout">
+
+                <EditText
+                    android:id="@+id/add_clothes_rental_price_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Rental Price"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_clothes_description_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_rental_price_text_input_layout">
+
+                <EditText
+                    android:id="@+id/add_clothes_description_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Description"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/add_clothes_image_upload_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/add_clothes_image_upload_note_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STEP 2: \n Upload at least 1 photo"
+            android:textSize="@dimen/text_size_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+
+        <ImageView
+            android:id="@+id/add_clothes_select_photo_0_image_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_clothes_image_upload_note_text_view"/>
+
+        <ImageView
+            android:id="@+id/add_clothes_select_photo_1_image_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_clothes_select_photo_0_image_view"/>
+
+        <ImageView
+            android:id="@+id/add_clothes_select_photo_2_image_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_clothes_select_photo_1_image_view"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom">
+
+        <Button
+            android:id="@+id/add_clothes_submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SUBMIT"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Sharona</string>
+    <string name="mapbox_access_token">pk.eyJ1Ijoic2hlcnZpbm94IiwiYSI6ImNqbmhvODBjYjBlbTEzdnFmdjQwZHRhZnYifQ.AJIyKUovRxF1jcFRtWjxow</string>
+    <string name="your_email">ایمیل شما</string>
+    <string name="password">کلمه عبور</string>
+
+    <string name="report">گزارش اشکال</string>
+    <string name="image_is_inappropriate">عکس نامناسب است</string>
+    <string name="details_are_wrong">اطلاعات اشتباه است</string>
+    <string name="language">زبان</string>
+    <string name="english">English</string>
+    <string name="persian">فارسی</string>
+    <string name="save_changes">ذخیره تغییرات</string>
+    <string name="sale">فروش</string>
+    <string name="state">وضعیت</string>
+    <string name="currency_with_place_holder">√ تومان</string>
+
+</resources>

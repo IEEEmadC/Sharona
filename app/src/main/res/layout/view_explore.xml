@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginBottom="48dp"
+              android:background="@color/white_snow"
+              android:orientation="vertical"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:color/holo_green_dark"
+        android:gravity="center"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/explore_row_view_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            fontPath="fonts/f2.TTF"
+
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:text="Column View"
+            tools:ignore="MissingPrefix"/>
+
+        <TextView
+            android:id="@+id/explore_grid_view_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            fontPath="fonts/f1.TTF"
+
+            android:text="Grid View"
+            tools:ignore="MissingPrefix"/>
+
+    </LinearLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/explore_shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:shimmer_auto_start="false"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/item_explore_grid_two_in_a_row_layout"/>
+
+            <include
+                layout="@layout/item_explore_grid_two_in_a_row_layout"/>
+
+            <include
+                layout="@layout/item_explore_grid_two_in_a_row_layout"/>
+
+            <include
+                layout="@layout/item_explore_grid_two_in_a_row_layout"/>
+
+            <include
+                layout="@layout/item_explore_grid_two_in_a_row_layout"/>
+
+            <include
+                layout="@layout/item_explore_grid_two_in_a_row_layout"/>
+
+            <include
+                layout="@layout/item_explore_grid_two_in_a_row_layout"/>
+
+        </LinearLayout>
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <GridView
+        android:id="@+id/explore_clothes_list_gridView_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:horizontalSpacing="1dp"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="1dp"/>
+
+    <GridView
+        android:id="@+id/explore_clothes_list_gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:horizontalSpacing="1dp"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="1dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/explore_clothes_list_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+
+</LinearLayout>

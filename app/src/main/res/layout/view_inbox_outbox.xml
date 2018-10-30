@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_snow">
+
+    <LinearLayout
+        android:id="@+id/inbox_outbox_selecting_box_selection_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:color/holo_green_dark"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/inbox_outbox_selecting_inbox_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:text="Inbox"/>
+
+        <TextView
+            android:id="@+id/inbox_outbox_selecting_outbox_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:text="Outbox"/>
+
+        <TextView
+            android:id="@+id/inbox_outbox_selecting_transaction_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:text="Transactions"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/inbox_outbox_inbox_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inbox_outbox_selecting_box_selection_layout"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/inbox_outbox_outbox_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inbox_outbox_selecting_box_selection_layout"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/inbox_outbox_transactions_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inbox_outbox_selecting_box_selection_layout"/>
+
+</android.support.constraint.ConstraintLayout>

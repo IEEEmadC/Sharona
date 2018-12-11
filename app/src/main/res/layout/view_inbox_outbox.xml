@@ -10,9 +10,9 @@
         android:id="@+id/inbox_outbox_selecting_box_selection_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@android:color/holo_green_dark"
+        android:background="@color/colorPrimaryDark"
         android:gravity="center"
-        android:weightSum="3">
+        android:weightSum="2">
 
         <TextView
             android:id="@+id/inbox_outbox_selecting_inbox_text_view"
@@ -20,8 +20,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingEnd="16dp"
             android:paddingStart="16dp"
+            android:textColor="@color/textOnPrimaryColor"
+            android:paddingEnd="16dp"
             android:text="Inbox"/>
 
         <TextView
@@ -30,8 +31,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingEnd="16dp"
             android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:text="Outbox"/>
 
         <TextView
@@ -40,9 +41,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingEnd="16dp"
             android:paddingStart="16dp"
-            android:text="Transactions"/>
+            android:paddingEnd="16dp"
+            android:text="Transactions"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tour_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/test_color"
+        app:layout_constraintBottom_toTopOf="@id/tour_page_bottom_layout"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/tour_page_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingStart="@dimen/margin_medium"
+        android:paddingEnd="@dimen/margin_medium"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <com.rd.PageIndicatorView
+            android:id="@+id/tour_page_indicator_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:piv_animationType="thinWorm"
+            app:piv_dynamicCount="true"
+            app:piv_interactiveAnimation="true"
+            app:piv_selectedColor="@color/colorSecondaryDark"
+            app:piv_unselectedColor="@color/colorPrimaryDark"
+            app:piv_viewPager="@id/tour_view_pager"/>
+
+
+        <TextView
+            android:id="@+id/tour_next_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/tour_next_text_view2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BODY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/easy_test"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:src="@drawable/img_001"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

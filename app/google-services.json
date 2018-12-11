@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "45287034291",
+    "firebase_url": "https://sharona-2c54b.firebaseio.com",
+    "project_id": "sharona-2c54b",
+    "storage_bucket": "sharona-2c54b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45287034291:android:e825c4ed6ef31f5c",
+        "android_client_info": {
+          "package_name": "com.sharonaapp.sharona"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "45287034291-1oc7dta33f57a3amen5jrgev483fbb98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sharonaapp.sharona",
+            "certificate_hash": "3de64d4a5c324e4d45d5c4287edeeb2ff88ebed0"
+          }
+        },
+        {
+          "client_id": "45287034291-tph0kg4cjbf0rhu5f1oh9rjgvrvhtill.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARSb6x8Za3rvTAFmYhpWLd6sBr0mzeGjY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "45287034291-tph0kg4cjbf0rhu5f1oh9rjgvrvhtill.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

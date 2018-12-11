@@ -4,103 +4,101 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:animateLayoutChanges="true"
               android:background="@color/white_snow"
               android:gravity="center"
               android:orientation="vertical">
 
 
+    <com.shuhart.stepview.StepView
+        android:id="@+id/step_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large"
+        android:padding="16dp"
+        app:sv_animationType="Line"
+        app:sv_doneCircleColor="@color/colorAccent"
+        app:sv_doneCircleRadius="12dp"
+        app:sv_doneStepLineColor="@color/colorAccent"
+        app:sv_doneStepMarkColor="@color/colorPrimary"
+        app:sv_nextStepLineColor="@color/colorAccent"
+        app:sv_nextTextColor="@color/colorAccent"
+        app:sv_selectedCircleColor="@color/colorAccent"
+        app:sv_selectedCircleRadius="12dp"
+        app:sv_selectedStepNumberColor="@color/colorPrimary"
+        app:sv_selectedTextColor="@color/colorAccent"
+        app:sv_stepLineWidth="1dp"
+        app:sv_stepNumberTextSize="12sp"
+        app:sv_stepPadding="4dp"
+        app:sv_stepViewStyle="@style/StepView"/>
+
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:paddingBottom="@dimen/margin_large">
 
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/add_clothes_details_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_medium"
             android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             >
 
-            <TextView
-                android:id="@+id/add_clothes_status_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="status"
-                android:textSize="@dimen/text_size_normal"
-                fontPath="fonts/f1.TTF"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingPrefix"/>
-
-            <TextView
-                android:id="@+id/add_clothes_details_note_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="STEP 1: \n Fill in clothes detail"
-                android:textSize="@dimen/text_size_normal"
-                fontPath="fonts/f2.TTF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingPrefix"/>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/add_clothes_username_text_input_layout"
+            <Spinner
+                android:id="@+id/add_clothes_type_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                fontPath="fonts/f2.TTF"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_clothes_details_note_text_view">
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/margin_small"
+                />
 
-                <EditText
-                    android:id="@+id/add_clothes_username_edit_text"
-                    android:layout_width="match_parent"
-                    fontPath="fonts/f2.TTF"
-                    android:layout_height="wrap_content"
-                    android:hint="username"
-                    tools:ignore="MissingPrefix"/>
+            <Spinner
+                android:id="@+id/add_clothes_size_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_type_spinner"
+                android:layout_marginTop="@dimen/margin_small"
+                />
 
-            </android.support.design.widget.TextInputLayout>
+            <Spinner
+                android:id="@+id/add_clothes_brand_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_size_spinner"
+                android:layout_marginTop="@dimen/margin_medium"
+                />
+            <Spinner
+                android:id="@+id/add_clothes_color_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_brand_spinner"
+                android:layout_marginTop="@dimen/margin_medium"
+                />
+
+
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/add_clothes_type_text_input_layout"
+                fontPath="fonts/f1.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                fontPath="fonts/f2.TTF"
-
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_clothes_username_text_input_layout">
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_color_spinner"
+                >
 
-                <EditText
-                    android:id="@+id/add_clothes_type_edit_text"
+                <AutoCompleteTextView
+                    android:id="@+id/add_clothes_type_text_input_edit_text"
+                    fontPath="fonts/f1.ttf"
                     android:layout_width="match_parent"
-                    fontPath="fonts/f2.TTF"
-
                     android:layout_height="wrap_content"
                     android:hint="Type"
-                    tools:ignore="MissingPrefix"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/add_clothes_brand_text_input_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"                fontPath="fonts/f2.TTF"
-
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_clothes_type_text_input_layout">
-
-                <EditText
-                    android:id="@+id/add_clothes_brand_edit_text"
-                    android:layout_width="match_parent"
-                    fontPath="fonts/f2.TTF"
-
-                    android:layout_height="wrap_content"
-                    android:hint="Brand"
                     tools:ignore="MissingPrefix"/>
 
             </android.support.design.widget.TextInputLayout>
@@ -110,10 +108,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_clothes_brand_text_input_layout">
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_type_text_input_layout">
 
-                <EditText
-                    android:id="@+id/add_clothes_size_edit_text"
+                <AutoCompleteTextView
+                    android:id="@+id/add_clothes_size_text_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Size"/>
@@ -121,35 +119,254 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/add_clothes_original_price_text_input_layout"
+                android:id="@+id/add_clothes_brand_text_input_layout"
+                fontPath="fonts/f2.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_clothes_size_text_input_layout">
 
-                <EditText
-                    android:id="@+id/add_clothes_original_price_edit_text"
+                <AutoCompleteTextView
+                    android:id="@+id/add_clothes_brand_text_input_edit_text"
+                    fontPath="fonts/f1.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Original Price"/>
+                    android:hint="Brand"
+                    tools:ignore="MissingPrefix"/>
 
             </android.support.design.widget.TextInputLayout>
-
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/add_clothes_rental_price_text_input_layout"
+                android:id="@+id/add_clothes_color_text_input_layout"
+                fontPath="fonts/f2.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_clothes_original_price_text_input_layout">
+                app:layout_constraintTop_toBottomOf="@id/add_clothes_brand_text_input_layout">
 
-                <EditText
-                    android:id="@+id/add_clothes_rental_price_edit_text"
+                <AutoCompleteTextView
+                    android:id="@+id/add_clothes_color_text_input_edit_text"
+                    fontPath="fonts/f1.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Rental Price"/>
+                    android:hint="Color"
+                    tools:ignore="MissingPrefix"/>
 
             </android.support.design.widget.TextInputLayout>
+
+
+            <LinearLayout
+                android:id="@+id/add_cloths_sellable_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_clothes_color_text_input_layout">
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/add_clothes_sellable_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="For Sale"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/add_clothes_buy_price_text_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/add_clothes_sellable_checkbox"
+                    app:layout_constraintTop_toBottomOf="@id/add_clothes_size_text_input_layout">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/add_clothes_buy_price_text_input_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Buy Price"/>
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_cloths_lendable_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_cloths_sellable_layout">
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/add_clothes_lendable_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="For Rent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/add_cloths_sellable_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/add_clothes_rental_price_text_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/add_clothes_lendable_checkbox">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/add_clothes_rental_price_text_input_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Rental Price"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_cloths_swapable_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_cloths_lendable_layout">
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/add_clothes_swapable_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="For Swap"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/add_cloths_lendable_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/add_clothes_swap_condition_type_text_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    app:layout_constraintStart_toEndOf="@id/add_clothes_swapable_checkbox"
+                    app:layout_constraintTop_toTopOf="@id/add_clothes_swapable_checkbox">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/add_clothes_swap_condition_type_text_input_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Desired Type"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_cloths_swapable_layout_2nd_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_cloths_swapable_layout">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/add_cloths_lendable_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/add_clothes_swap_condition_size_text_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    app:layout_constraintStart_toEndOf="@id/add_clothes_swapable_checkbox"
+                    app:layout_constraintTop_toTopOf="@id/add_clothes_swapable_checkbox">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/add_clothes_swap_condition_size_text_input_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Desired Size"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/add_cloths_swapable_layout_3rd_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_cloths_swapable_layout_2nd_row">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/add_cloths_lendable_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/add_clothes_swap_condition_color_text_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    app:layout_constraintStart_toEndOf="@id/add_clothes_swapable_checkbox"
+                    app:layout_constraintTop_toTopOf="@id/add_clothes_swapable_checkbox">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/add_clothes_swap_condition_color_text_input_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Desired Color"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/add_cloths_swapable_layout_4th_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_cloths_swapable_layout_3rd_row">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/add_cloths_lendable_layout"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/add_clothes_swap_condition_brand_text_input_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    app:layout_constraintStart_toEndOf="@id/add_clothes_swapable_checkbox"
+                    app:layout_constraintTop_toTopOf="@id/add_clothes_swapable_checkbox">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/add_clothes_swap_condition_brand_text_input_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Desired Brand"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
 
 
             <android.support.design.widget.TextInputLayout
@@ -157,10 +374,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_clothes_rental_price_text_input_layout">
+                app:layout_constraintTop_toBottomOf="@id/add_cloths_swapable_layout_4th_row">
 
-                <EditText
-                    android:id="@+id/add_clothes_description_edit_text"
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/add_clothes_description_text_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Description"/>
@@ -176,56 +393,78 @@
         android:id="@+id/add_clothes_image_upload_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/add_clothes_image_upload_note_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STEP 2: \n Upload at least 1 photo"
-            android:textSize="@dimen/text_size_normal"
+        <View
+            android:id="@+id/add_clothes_image_upload_layout_center_view"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"/>
 
 
         <ImageView
             android:id="@+id/add_clothes_select_photo_0_image_view"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:background="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/image_upload_place_holder"
+            android:tag="0"
+            app:layout_constraintEnd_toStartOf="@id/add_clothes_image_upload_layout_center_view"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_clothes_image_upload_note_text_view"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
             android:id="@+id/add_clothes_select_photo_1_image_view"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:background="@android:color/darker_gray"
+            android:src="@drawable/image_upload_place_holder"
+            android:tag="1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_clothes_select_photo_0_image_view"/>
+            app:layout_constraintStart_toStartOf="@id/add_clothes_image_upload_layout_center_view"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
             android:id="@+id/add_clothes_select_photo_2_image_view"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="@dimen/margin_medium"
-            android:background="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/image_upload_place_holder"
+            android:tag="2"
+            app:layout_constraintEnd_toStartOf="@id/add_clothes_image_upload_layout_center_view"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_clothes_select_photo_1_image_view"/>
+            app:layout_constraintTop_toBottomOf="@id/add_clothes_select_photo_0_image_view"/>
+
+        <ImageView
+            android:id="@+id/add_clothes_select_photo_3_image_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:src="@drawable/image_upload_place_holder"
+            android:tag="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/add_clothes_image_upload_layout_center_view"
+            app:layout_constraintTop_toBottomOf="@id/add_clothes_select_photo_0_image_view"/>
+
+
+        <ImageView
+            android:id="@+id/add_clothes_select_photo_4_image_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:src="@drawable/image_upload_place_holder"
+            android:tag="4"
+            app:layout_constraintEnd_toStartOf="@id/add_clothes_image_upload_layout_center_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_clothes_select_photo_2_image_view"/>
+
 
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="56dp">
 
         <Button
             android:id="@+id/add_clothes_submit_button"

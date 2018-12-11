@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/white_snow"
               android:gravity="center"
               android:orientation="vertical"
-              android:paddingEnd="16dp"
-              android:paddingStart="16dp">
-
-    <TextView
-        android:id="@+id/sign_up_status_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        fontPath="fonts/f1.ttf"
-        android:text="STATUS"
-        tools:ignore="MissingPrefix"/>
+              android:paddingStart="16dp"
+              android:paddingEnd="16dp">
 
     <LinearLayout
         android:id="@+id/sign_up_sign_up_layout"
@@ -24,49 +17,83 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/sign_up_username_edit_text"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/sign_up_username_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="your username"
-            android:inputType="text"
-            fontPath="fonts/f2.TTF"
+            app:errorEnabled="true"
+            app:hintTextAppearance="@style/TextAppearance.TextInputLayoutHintColor">
 
-            android:maxLines="1"
-            tools:ignore="MissingPrefix"/>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/sign_up_username_text_input_edit_text"
+                fontPath="fonts/f2.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:inputType="text"
+                android:maxLines="1"
+                tools:ignore="MissingPrefix"/>
 
-        <EditText
-            android:id="@+id/sign_up_email_edit_text"
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/sign_up_email_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="your email"
-            fontPath="fonts/f1.TTF"
+            app:errorEnabled="true"
+            app:hintTextAppearance="@style/TextAppearance.TextInputLayoutHintColor">
 
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            tools:ignore="MissingPrefix"/>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/sign_up_email_edit_text"
+                fontPath="fonts/f1.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                tools:ignore="MissingPrefix"/>
 
-        <EditText
-            android:id="@+id/sign_up_national_id_edit_text"
+        </android.support.design.widget.TextInputLayout>
+
+        <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:errorEnabled="true"-->
+        <!--app:hintTextAppearance="@style/TextAppearance.TextInputLayoutHintColor">-->
+
+
+        <!--<android.support.design.widget.TextInputEditText-->
+        <!--android:id="@+id/sign_up_national_id_edit_text"-->
+        <!--fontPath="fonts/f2.ttf"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="National id"-->
+        <!--android:inputType="number"-->
+        <!--android:maxLines="1"-->
+        <!--tools:ignore="MissingPrefix"/>-->
+
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/sign_up_password_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="your national id"
-            android:inputType="number"
-            fontPath="fonts/f2.TTF"
+            app:errorEnabled="true"
+            app:hintTextAppearance="@style/TextAppearance.TextInputLayoutHintColor">
 
-            android:maxLines="1"
-            tools:ignore="MissingPrefix"/>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/sign_up_password_edit_text"
+                fontPath="fonts/f1.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                tools:ignore="MissingPrefix"/>
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/sign_up_password_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="password"
-            fontPath="fonts/f1.TTF"
-
-            android:inputType="textPassword"
-            android:maxLines="1"
-            tools:ignore="MissingPrefix"/>
 
         <Button
             android:id="@+id/sign_up_sign_up_button"
@@ -75,19 +102,19 @@
             android:text="SIGN UP"/>
 
         <TextView
+            fontPath="fonts/f1.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            fontPath="fonts/f1.TTF"
 
             android:text="Already registered?"
             tools:ignore="MissingPrefix"/>
 
         <TextView
             android:id="@+id/sign_up_login_text_view"
+            fontPath="fonts/f1.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fontPath="fonts/f1.TTF"
             android:text="Login here!"
 
             android:textColor="@android:color/holo_blue_dark"

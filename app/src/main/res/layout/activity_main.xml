@@ -1,28 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    tools:context=".activity.MainActivity">
 
 
-    <com.appestan.sharona.CustomUI.NonSwipeableViewPager
-        android:id="@+id/activity_main_non_swipeable_view_pager"
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/custom_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"/>
 
-    <com.appestan.sharona.CustomUI.MainTabBar
-        android:id="@+id/tab_layout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/main_activity_bottom_navigation_view"
+        android:layout_below="@id/toolbar"
         android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+
+        <!--<FrameLayout-->
+        <!--android:id="@+id/activity_main_frame_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+        <fragment
+            android:id="@+id/activity_main_nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph"
+            />
+
+        <fragment
+            android:id="@+id/activity_main_add_clothes_nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="false"
+            app:navGraph="@navigation/nav_graph_add_clothes"
+            />
+
+    </LinearLayout>
+
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/main_activity_bottom_navigation_view"
+        app:bmb_buttonEnum="ham"
+        app:bmb_piecePlaceEnum="piecePlace_ham_4"
+        app:bmb_buttonPlaceEnum="buttonPlace_ham_4"
+
         />
 
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/main_activity_bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorSecondaryLight"
+        app:itemIconTint="@drawable/main_bottom_navigation_color_selector"
+        app:itemTextColor="@drawable/main_bottom_navigation_color_selector"
+        app:menu="@menu/main_bottom_navigation_menu"/>
 
-</android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>

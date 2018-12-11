@@ -4,17 +4,16 @@
               android:layout_height="match_parent"
               android:background="@color/white_snow"
               android:gravity="center"
-              android:orientation="vertical"
-    >
+              android:orientation="vertical">
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Closet for rent:"/>
+        android:text="My Closet:"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_closet_clothes_recycler_view"
+        android:id="@+id/my_closet_clothes_recycler_view_OTHER_ONE"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

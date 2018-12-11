@@ -1,18 +1,30 @@
 <resources>
     <string name="app_name">Sharona</string>
     <string name="mapbox_access_token">pk.eyJ1Ijoic2hlcnZpbm94IiwiYSI6ImNqbmhvODBjYjBlbTEzdnFmdjQwZHRhZnYifQ.AJIyKUovRxF1jcFRtWjxow</string>
-    <string name="your_email">ایمیل شما</string>
-    <string name="password">کلمه عبور</string>
+    <string name="your_email">your email</string>
+    <string name="password">password</string>
 
-    <string name="report">گزارش اشکال</string>
-    <string name="image_is_inappropriate">عکس نامناسب است</string>
-    <string name="details_are_wrong">اطلاعات اشتباه است</string>
-    <string name="language">زبان</string>
+    <string name="report">Report</string>
+
+    <string name="image_is_inappropriate">Image is inappropriate</string>
+    <string name="details_are_wrong">Details are wrong</string>
+    <string name="language">Language</string>
     <string name="english">English</string>
     <string name="persian">فارسی</string>
-    <string name="save_changes">ذخیره تغییرات</string>
-    <string name="sale">فروش</string>
-    <string name="state">وضعیت</string>
-    <string name="currency_with_place_holder">√ تومان</string>
+    <string name="save_changes">Save changes</string>
+    <string name="sale">Sale</string>
+    <string name="state">State</string>
+    <string name="currency_with_place_holder">√ $</string>
+    <string name="sheba_account_is_needed">Sheba account number is needed</string>
+    <string name="default_notification_channel_id">11001</string>
+
+
+    <string name="project_id_">sharona-2c54b</string>
+    <string name="web_client_id_">45287034291-tph0kg4cjbf0rhu5f1oh9rjgvrvhtill.apps.googleusercontent.com</string>
+
+    <string name="firebase_web_host" translatable="false">sharona-2c54b.firebaseapp.com</string>
+    <string name="channel_name">Sharona Channel</string>
+    <string name="channel_description">Request Arrived</string>
+
 
 </resources>

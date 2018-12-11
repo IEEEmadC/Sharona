@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/login_parent_layout"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:layout_gravity="center"
               android:background="@color/white_snow"
               android:gravity="center"
               android:orientation="vertical"
-              android:paddingEnd="16dp"
               android:paddingStart="16dp"
-    android:layout_gravity="center">
+              android:paddingEnd="16dp">
+
 
     <LinearLayout
         android:id="@+id/login_logout_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_gravity="center"
+        android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone"
         >
@@ -82,6 +84,20 @@
             android:text="Create one here!"
             android:textColor="@android:color/holo_blue_dark"/>
 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:background="@color/colorSecondaryDark"/>
+
+
+        <Button
+            android:id="@+id/login_login_with_google_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login with Google"/>
 
     </LinearLayout>
 

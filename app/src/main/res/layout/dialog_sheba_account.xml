@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/sheba_account_title_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:gravity="center"
+        android:text="@string/sheba_account_is_needed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/sheba_account_number_edit_text"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:maxLength="22"
+        app:layout_constraintStart_toEndOf="@id/sheba_account_prefix_text_view"
+        app:layout_constraintTop_toBottomOf="@id/sheba_account_title_text_view"/>
+
+    <TextView
+        android:id="@+id/sheba_account_prefix_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IR"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sheba_account_number_edit_text"
+        />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/item_tour_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"/>
+
+    <View
+        android:id="@+id/item_tour_center_point_under_image_view"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_tour_image_view"/>
+
+    <TextView
+        android:id="@+id/item_tour_title_text_view"
+        fontPath="fonts/f1.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/item_tour_center_point_under_image_view"
+        tools:ignore="MissingPrefix"
+        tools:text="Title"/>
+
+    <TextView
+        android:id="@+id/item_tour_desc_text_view"
+        fontPath="fonts/f1.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_tour_title_text_view"
+        tools:ignore="MissingPrefix"
+        tools:text="description text goes here"/>
+
+</android.support.constraint.ConstraintLayout>

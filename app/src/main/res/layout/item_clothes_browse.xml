@@ -4,10 +4,10 @@
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="match_parent"
                                              android:layout_height="80dp"
-                                             android:layout_marginBottom="8dp"
-                                             android:layout_marginEnd="16dp"
                                              android:layout_marginStart="16dp"
                                              android:layout_marginTop="8dp"
+                                             android:layout_marginEnd="16dp"
+                                             android:layout_marginBottom="8dp"
                                              android:background="@color/white_snow"
                                              android:orientation="vertical">
 
@@ -26,6 +26,7 @@
         android:id="@+id/item_explore_row_size_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
         android:background="@color/white_snow"
         app:layout_constraintStart_toEndOf="@id/item_explore_row_type_text_view"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,23 +35,44 @@
 
     <ImageView
         android:id="@+id/item_explore_row_layout_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:scaleType="centerInside"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_upload_place_holder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/item_explore_row_username_text_view"
         app:layout_constraintTop_toBottomOf="@id/item_explore_row_size_text_view"
         />
 
     <TextView
-        android:id="@+id/item_explore_row_username_text_view"
+        android:id="@+id/item_explore_row_brand_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white_snow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/item_explore_row_type_text_view"
-        tools:text="USERNAME"
+        tools:text="Brand"
+        />
+
+    <TextView
+        android:id="@+id/item_explore_row_price_for_buy_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white_snow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_explore_row_brand_text_view"
+        tools:text="Buy: 40$"
+        />
+
+    <TextView
+        android:id="@+id/item_explore_row_price_for_rent_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white_snow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_explore_row_price_for_buy_text_view"
+        tools:text="Rent: 10$"
         />
 
 </android.support.constraint.ConstraintLayout>

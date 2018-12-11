@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.appestan.sharona">
+          package="com.sharonaapp.sharona">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATIONE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
+
+
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:name=".MyApplication"
+        android:name="com.sharonaapp.sharona.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +24,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.appestan.sharona.MainActivity"
+            android:name="com.sharonaapp.sharona.activity.SplashActivity"
+            android:noHistory="true"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -28,53 +35,42 @@
 
         </activity>
 
-        <receiver android:name="co.ronash.pushe.receiver.UpdateReceiver">
+        <activity
+            android:name="com.sharonaapp.sharona.activity.MainActivity"
+            android:theme="@style/AppTheme.Launcher"/>
+        <activity
+            android:name="com.sharonaapp.sharona.activity.TourActivity"
+            android:theme="@style/AppTheme.Launcher"/>
+
+
+        <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
-
-                <data
-                    android:path="com.appestan.sharona"
-                    android:scheme="package"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
-        </receiver>
+        </service>
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
+        <service android:name=".services.MyFirebaseInstanceIdService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-
-                <category android:name="com.appestan.sharona"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
-        </receiver>
+        </service>
+
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/anim_sharona_logo"/>
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent"/>
 
         <meta-data
-            android:name="co.ronash.pushe.token"
-            android:value="PUSHE_962737403191"/>
-        <meta-data
-            android:name="co.ronash.pushe.cr"
-            android:value="Tm9uZQ=="/>
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
 
     </application>
-
-
-    <uses-sdk
-        tools:overrideLibrary="co.ronash.pushe"/>
-    <permission
-        android:name="com.appestan.sharona.permission.C2D_MESSAGE"
-        android:protectionLevel="signature"/>
-
-    <uses-permission
-        android:name="com.appestan.sharona.permission.C2D_MESSAGE"/>
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
-    <!-- Optional permissions -->
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
 
 </manifest>

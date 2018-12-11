@@ -29,8 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:maxHeight="200dp"
-        android:paddingEnd="1dp"
         android:paddingStart="1dp"
+        android:paddingEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -48,35 +48,32 @@
         <!--suppress AndroidUnknownAttribute -->
         <TextView
             android:id="@+id/item_explore_grid_layout_brand_textView"
+            fontPath="fonts/f1.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small_x"
-            fontPath="fonts/f1.ttf"
-
-            tools:text="Nike"
-            tools:ignore="MissingPrefix"/>
+            tools:ignore="MissingPrefix"
+            tools:text="Nike"/>
 
         <!--suppress AndroidUnknownAttribute -->
         <TextView
             android:id="@+id/item_explore_grid_layout_size_textView"
+            fontPath="fonts/f1.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small_x"
-            fontPath="fonts/f1.ttf"
-
-            tools:text="Small"
-            tools:ignore="MissingPrefix"/>
+            tools:ignore="MissingPrefix"
+            tools:text="Small"/>
 
         <!--suppress AndroidUnknownAttribute -->
         <TextView
             android:id="@+id/item_explore_grid_layout_rental_price_textView"
+            fontPath="fonts/f1.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small_x"
-            fontPath="fonts/f1.ttf"
-
-            tools:text="22 $"
-            tools:ignore="MissingPrefix"/>
+            tools:ignore="MissingPrefix"
+            tools:text="22 $"/>
 
         <ImageView
             android:id="@+id/item_explore_grid_layout_like_image_view"

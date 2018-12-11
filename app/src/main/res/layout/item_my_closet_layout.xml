@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:paddingStart="@dimen/margin_small"
+    android:paddingTop="@dimen/margin_small_x"
+    android:paddingEnd="@dimen/margin_small"
+    android:paddingBottom="@dimen/margin_small_x">
+
+
+    <TextView
+        android:id="@+id/item_explore_row_type_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:background="@color/white_snow"
+        app:layout_constraintStart_toEndOf="@id/item_explore_row_layout_image_view"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="TYPE"
+        />
+
+    <TextView
+        android:id="@+id/item_explore_row_size_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:background="@color/white_snow"
+        app:layout_constraintStart_toEndOf="@id/item_explore_row_type_text_view"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Size"
+        />
+
+
+    <TextView
+        android:id="@+id/item_explore_row_brand_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white_snow"
+        app:layout_constraintStart_toStartOf="@id/item_explore_row_type_text_view"
+        app:layout_constraintTop_toBottomOf="@id/item_explore_row_type_text_view"
+        tools:text="Brand"
+        />
+
+    <TextView
+        android:id="@+id/item_explore_row_price_for_buy_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white_snow"
+        app:layout_constraintStart_toStartOf="@id/item_explore_row_type_text_view"
+        app:layout_constraintTop_toBottomOf="@id/item_explore_row_brand_text_view"
+        tools:text="Buy: 40$"
+        />
+
+    <TextView
+        android:id="@+id/item_explore_row_price_for_rent_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white_snow"
+        app:layout_constraintStart_toStartOf="@id/item_explore_row_type_text_view"
+        app:layout_constraintTop_toBottomOf="@id/item_explore_row_price_for_buy_text_view"
+        tools:text="Rent: 10$"
+        />
+
+    <ImageView
+        android:id="@+id/item_explore_row_layout_image_view"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/image_upload_place_holder"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

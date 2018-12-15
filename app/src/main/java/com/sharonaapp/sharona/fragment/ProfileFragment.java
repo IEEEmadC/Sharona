@@ -8,12 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.sharonaapp.sharona.BackButtonClickListenerImpl;
 import com.sharonaapp.sharona.R;
 import com.sharonaapp.sharona.activity.MainActivity;
+import com.sharonaapp.sharona.manager.LoginLogoutStateManager;
 import com.sharonaapp.sharona.model.Profile;
 import com.sharonaapp.sharona.model.response.ProfileResponse;
 import com.sharonaapp.sharona.network.Api;
@@ -42,6 +43,9 @@ public class ProfileFragment extends Fragment {
     TextInputEditText emailTextInputEditText;
     @BindView(R.id.profile_city_text_input_edit_text)
     TextInputEditText cityTextInputEditText;
+
+    @BindView(R.id.profile_save_changes_button)
+    Button saveChangesButton;
 
     private Profile persistedProfile;
 
@@ -84,12 +88,13 @@ public class ProfileFragment extends Fragment {
 
     void fetchProfile()
     {
-
+        ((MainActivity) getActivity()).showLoading();
         Call<ProfileResponse> profile = NetworkManager.getInstance().getEndpointApi(Api.class).profile();
         profile.enqueue(new Callback<ProfileResponse>() {
             @Override
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response)
             {
+                ((MainActivity) getActivity()).hideLoading();
                 if (response.isSuccessful() && response.body() != null && response.body().getData() != null)
                 {
                     setProfileResponseDataToView(response.body().getData());
@@ -104,6 +109,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t)
             {
+                ((MainActivity) getActivity()).hideLoading();
                 failedToFetchProfile();
             }
         });
@@ -159,13 +165,6 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).setOnBackPressedListener(new BackButtonClickListenerImpl(getActivity()));
-
-        // TODO: 10/5/18 this profile has to be fetched from server
-        persistedProfile = new Profile();
-        persistedProfile.setUsername("Shervin");
-        persistedProfile.setEmail("shervino@gmail.com");
-        persistedProfile.setCity("Tehran");
 
     }
 
@@ -173,8 +172,15 @@ public class ProfileFragment extends Fragment {
     public void onResume()
     {
         super.onResume();
-        fetchProfile();
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        if (LoginLogoutStateManager.getInstance().isUserLogedIn())
+        {
+            fetchProfile();
+        }
+        else
+        {
+            Toast.makeText(getContext(), "Please Login or Sign up first!", Toast.LENGTH_SHORT).show();
+            ((MainActivity) getActivity()).routeToLoginFragment();
+        }
     }
 
     @Override

@@ -78,6 +78,12 @@ dependencies {
 
     implementation 'com.nightonke:boommenu:2.1.1'
 
+    implementation 'com.yarolegovich:lovely-dialog:1.1.0'
+
+    implementation 'com.github.ybq:Android-SpinKit:1.2.0'
+
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.8.2'
 
 }
 apply plugin: "androidx.navigation.safeargs"

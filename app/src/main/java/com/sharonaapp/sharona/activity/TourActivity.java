@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sharonaapp.sharona.MyApplication;
 import com.sharonaapp.sharona.R;
 import com.sharonaapp.sharona.adapter.TourAdapter;
 import com.sharonaapp.sharona.model.TourPage;
@@ -25,14 +26,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.sharonaapp.sharona.manager.SharedPreferencesManager.VIRGINITY_OF_TOUR;
+
 public class TourActivity extends AppCompatActivity {
 
     @BindView(R.id.tour_view_pager)
     ViewPager viewPager;
     @BindView(R.id.tour_next_text_view)
     TextView nextTextView;
-    @BindView(R.id.tour_next_text_view2)
-    TextView nextTextViewBody;
 
     @OnClick(R.id.tour_next_text_view)
     void onNextClicked()
@@ -43,6 +44,7 @@ public class TourActivity extends AppCompatActivity {
         }
         else
         {
+            MyApplication.getSharedPreferencesManager().persist(VIRGINITY_OF_TOUR, Boolean.TRUE);
             TourActivity.this.startActivity(new Intent(TourActivity.this, MainActivity.class));
         }
     }
@@ -55,10 +57,10 @@ public class TourActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ArrayList<TourPage> tourPages = new ArrayList<>();
-        TourPage tourPage = new TourPage(this.getResources().getDrawable(R.drawable.img_001), "Buy!", "Buy clothes with best prices Evar!");
-        TourPage tourPage1 = new TourPage(this.getResources().getDrawable(R.drawable.img_002), "Sell!", "Sell clothes that you don't wear so often");
-        TourPage tourPage2 = new TourPage(this.getResources().getDrawable(R.drawable.img_003), "Rent!", "Rent clothes for special occasions");
-        TourPage tourPage3 = new TourPage(this.getResources().getDrawable(R.drawable.img_004), "Swap!", "Swap your clothes with others");
+        TourPage tourPage = new TourPage(this.getResources().getDrawable(R.drawable.n01), "Buy!", "Buy clothes with best prices Evar!");
+        TourPage tourPage1 = new TourPage(this.getResources().getDrawable(R.drawable.n02), "Sell!", "Sell clothes that you don't wear so often");
+        TourPage tourPage2 = new TourPage(this.getResources().getDrawable(R.drawable.n03), "Rent!", "Rent clothes for special occasions");
+        TourPage tourPage3 = new TourPage(this.getResources().getDrawable(R.drawable.n04), "Swap!", "Swap your clothes with others");
         tourPages.add(tourPage);
         tourPages.add(tourPage1);
         tourPages.add(tourPage2);
@@ -67,47 +69,6 @@ public class TourActivity extends AppCompatActivity {
         viewPager.setAdapter(tourAdapter);
         setPageTransformerToViewPager();
         setXXX();
-
-        Bitmap bm = ((BitmapDrawable) ((ImageView) findViewById(R.id.easy_test)).getDrawable()).getBitmap();
-        Palette paletteSync = createPaletteSync(bm);
-        paletteSync.getDarkMutedSwatch();
-
-        Palette.Swatch dominantSwatch = paletteSync.getDominantSwatch();
-        if (dominantSwatch != null)
-        {
-            viewPager.setBackgroundColor(dominantSwatch.getRgb());
-            nextTextView.setTextColor(dominantSwatch.getTitleTextColor());
-            nextTextViewBody.setTextColor(dominantSwatch.getBodyTextColor());
-
-        }
-
-
-        Palette.Swatch vibrant = paletteSync.getVibrantSwatch();
-        if (vibrant != null)
-        {
-            int titleColor = vibrant.getTitleTextColor();
-            viewPager.setBackgroundColor(vibrant.getRgb());
-            nextTextView.setTextColor(vibrant.getTitleTextColor());
-            nextTextViewBody.setTextColor(vibrant.getBodyTextColor());
-            // ...
-        }
-
-
-        Palette.Swatch darkVibrant = paletteSync.getMutedSwatch();
-        if (darkVibrant != null)
-        {
-            viewPager.setBackgroundColor(darkVibrant.getRgb());
-            nextTextView.setTextColor(darkVibrant.getTitleTextColor());
-            nextTextViewBody.setTextColor(darkVibrant.getBodyTextColor());
-        }
-
-        Palette.Swatch darkMutated = paletteSync.getDarkMutedSwatch();
-        if (darkMutated != null)
-        {
-            int titlecolor = darkMutated.getTitleTextColor();
-//            viewPager.setBackgroundColor(darkMutated.getRgb());
-
-        }
 
 
     }

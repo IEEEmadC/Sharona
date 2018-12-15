@@ -9,10 +9,16 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.sharonaapp.sharona.R;
+import com.sharonaapp.sharona.model.response.ExploreClothesResponse;
+
+import java.util.List;
+
+import static com.sharonaapp.sharona.network.Url.BASE_URL;
 
 public class ClothesImageAdapter extends PagerAdapter {
 
-    int imagesCount;
+
+    private List<ExploreClothesResponse.Image> imageList;
 
     String url0 = "https://mms-images.out.customink.com/mms/images/catalog/colors/04604/views/alt/front_medium_extended.png?design=djn0-00an-000p&placeMax=1&placeUseProduct=1&placeMaxPct=0.8";
     String url1 = "https://mms-images-prod.imgix.net/mms/images/catalog/271f962a217a8743ce242a18da753534/styles/4600/catalog_detail_image_large.jpg?ixlib=rails-2.1.4&w=700&h=700&fit=fill&bg=ffffff&dpr=1&q=60&fm=pjpg&auto=compress&trim=auto&trimmd=0";
@@ -20,15 +26,18 @@ public class ClothesImageAdapter extends PagerAdapter {
     String url3 = "https://mms-images-prod.imgix.net/mms/images/catalog/1990105835219a32f557bfa82b781d4a/styles/4600/supporting/2.jpg?ixlib=rails-2.1.4&w=425&h=495&fit=fill&bg=ffffff&dpr=1&q=39&fm=pjpg&auto=compress&trim=auto&trimmd=0";
     String url4 = "https://mms-images-prod.imgix.net/mms/images/catalog/83fd2299d85b565b4af8517f179c1e2c/styles/4600/supporting/3.jpg?ixlib=rails-2.1.4&w=425&h=495&fit=fill&bg=ffffff&dpr=1&q=39&fm=pjpg&auto=compress&trim=auto&trimmd=0";
 
-    public ClothesImageAdapter(int imagesCount)
+    public ClothesImageAdapter(List<ExploreClothesResponse.Image> imageList)
     {
-        this.imagesCount = imagesCount;
+        if (imageList != null)
+        {
+            this.imageList = imageList;
+        }
     }
 
     @Override
     public int getCount()
     {
-        return imagesCount;
+        return imageList.size();
     }
 
     @Override
@@ -42,33 +51,35 @@ public class ClothesImageAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position)
     {
         ViewGroup layout = ((ViewGroup) LayoutInflater.from(container.getContext()).inflate(R.layout.item_clothes_image, null));
-        if (position == 0)
-        {
+                    Glide.with(container.getContext()).load(BASE_URL + imageList.get(position).getPath()).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
 
-            Glide.with(container.getContext()).load(url0).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
-//            layout.findViewById(R.id.item_clothes_image_inner).setBackgroundColor(layout.getContext().getResources().getColor(R.color.colorAccent));
-
-        }
-        else if (position == 1)
-        {
-            Glide.with(container.getContext()).load(url1).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
-
-        }
-        else if (position == 2)
-        {
-            Glide.with(container.getContext()).load(url2).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
-
-        }
-        else if (position == 3)
-        {
-            Glide.with(container.getContext()).load(url3).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
-
-        }
-        else if (position == 4)
-        {
-            Glide.with(container.getContext()).load(url4).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
-
-        }
+//        if (position == 0)
+//        {
+//
+//            Glide.with(container.getContext()).load(url0).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
+////            layout.findViewById(R.id.item_clothes_image_inner).setBackgroundColor(layout.getContext().getResources().getColor(R.color.colorAccent));
+//
+//        }
+//        else if (position == 1)
+//        {
+//            Glide.with(container.getContext()).load(url1).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
+//
+//        }
+//        else if (position == 2)
+//        {
+//            Glide.with(container.getContext()).load(url2).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
+//
+//        }
+//        else if (position == 3)
+//        {
+//            Glide.with(container.getContext()).load(url3).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
+//
+//        }
+//        else if (position == 4)
+//        {
+//            Glide.with(container.getContext()).load(url4).into(((ImageView) layout.findViewById(R.id.item_clothes_image_inner)));
+//
+//        }
         container.addView(layout);
 
         return layout;

@@ -1,9 +1,12 @@
 package com.sharonaapp.sharona.utility;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 public class CommonHelper {
     /**
@@ -33,4 +36,19 @@ public class CommonHelper {
             }
         }
     }
+
+    public static boolean hideKeyboard(Context context, View v)
+    {
+        try
+        {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            return imm != null && imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
+        catch (Exception var3)
+        {
+            var3.printStackTrace();
+            return false;
+        }
+    }
+
 }

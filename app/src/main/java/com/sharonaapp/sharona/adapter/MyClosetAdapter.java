@@ -11,13 +11,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.sharonaapp.sharona.R;
-import com.sharonaapp.sharona.model.response.Clothes;
-import com.sharonaapp.sharona.model.response.ExploreClothesResponse;
+import com.sharonaapp.sharona.model.general.Clothes;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.sharonaapp.sharona.network.Url.BASE_URL;
 
 /**
  * The type My closet adapter.
@@ -59,7 +60,7 @@ public class MyClosetAdapter extends RecyclerView.Adapter<MyClosetAdapter.MyClos
         if (viewHolder.brandTextView.getContext() != null && clothes.getImages() != null && clothes.getImages().size() > 0)
         {
             Glide.with(viewHolder.brandTextView.getContext())
-                    .load(clothes.getImages().get(0))
+                    .load(BASE_URL + clothes.getImages().get(0).getPath())
                     .apply(new RequestOptions().placeholder(R.drawable.image_upload_place_holder))
                     .into(viewHolder.clothesImageView);
         }

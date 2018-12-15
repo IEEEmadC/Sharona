@@ -6,10 +6,13 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.sharonaapp.sharona.R;
 import com.sharonaapp.sharona.model.TourPage;
+import com.sharonaapp.sharona.model.general.Image;
 
 import java.util.List;
 
@@ -30,7 +33,8 @@ public class TourAdapter extends PagerAdapter {
     {
         TourPage tourPage = tourPageList.get(position);
         View view = LayoutInflater.from(context).inflate(R.layout.item_tour, container, false);
-        view.findViewById(R.id.item_tour_image_view).setBackground(tourPage.getImage());
+        Glide.with(container.getContext()).load(tourPage.getImage()).into(((ImageView) view.findViewById(R.id.item_tour_image_view)));
+//        view.findViewById(R.id.item_tour_image_view).setBackground(tourPage.getImage());
         ((TextView) view.findViewById(R.id.item_tour_title_text_view)).setText(tourPage.getTitle());
         ((TextView) view.findViewById(R.id.item_tour_desc_text_view)).setText(tourPage.getDesc());
 

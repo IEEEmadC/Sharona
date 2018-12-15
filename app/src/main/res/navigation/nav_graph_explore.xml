@@ -1,0 +1,36 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/mobile_navigation"
+            app:startDestination="@+id/item_explore">
+
+    <fragment
+        android:id="@+id/item_explore"
+        android:name="com.sharonaapp.sharona.fragment.ExploreFragment"
+        android:label="exploref"
+        tools:layout="@layout/view_explore">
+
+        <action
+            android:id="@+id/action_to_item_clothes_inner"
+            app:destination="@id/item_clothes_inner"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/item_clothes_inner"
+        android:name="com.sharonaapp.sharona.fragment.ClothesInnerFragment"
+        android:label="Clothes Inner Fragment"
+        tools:layout="@layout/fragment_clothes_inner">
+
+        <!--<action-->
+        <!--android:id="@+id/action_my_closet_to_hell"-->
+        <!--app:destination="@id/itemexploreFragment"/>-->
+
+    </fragment>
+
+
+</navigation>

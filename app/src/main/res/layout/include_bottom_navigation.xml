@@ -29,7 +29,7 @@
             android:id="@+id/bottom_navigation_item_0_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_add"/>
+            android:src="@drawable/ic_add_box_24dp"/>
 
 
         <TextView
@@ -63,7 +63,7 @@
             android:id="@+id/bottom_navigation_item_1_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_explore"/>
+            android:src="@drawable/ic_explore_24dp"/>
 
 
         <TextView

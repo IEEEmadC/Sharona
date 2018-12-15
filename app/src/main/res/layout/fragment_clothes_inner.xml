@@ -60,143 +60,506 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/view_clothes_inner_price_in_title_text_view"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/clothes_inner_buy_price_title_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:text="10$ For 48 Hours"
-                android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                />
+                >
 
-            <Button
-                android:id="@+id/view_clothes_inner_call_owner_button"
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_weight="0.3"
+                    android:background="@color/colorPrimaryHalfDark"
+                    >
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Buy price"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:background="@color/colorPrimaryLight">
+
+
+                    <TextView
+                        android:id="@+id/clothes_inner_buy_price_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        tools:text="40$"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/clothes_inner_rent_price_title_layout"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="@dimen/margin_large_x"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_large_x"
-                android:text="CALL CLOTH OWNER"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_clothes_inner_price_in_title_text_view"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small_x"
+                app:layout_constraintTop_toBottomOf="@id/clothes_inner_buy_price_title_layout"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_weight="0.3"
+                    android:background="@color/colorPrimaryHalfDark"
+                    >
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Rent price"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:background="@color/colorPrimaryLight">
+
+
+                    <TextView
+                        android:id="@+id/clothes_inner_rent_price_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        tools:text="30$"/>
+                </LinearLayout>
+            </LinearLayout>
 
 
             <LinearLayout
                 android:id="@+id/view_clothes_inner_buttons_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:orientation="horizontal"
+
                 android:paddingStart="@dimen/margin_medium"
                 android:paddingEnd="@dimen/margin_medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_clothes_inner_call_owner_button">
+                app:layout_constraintTop_toBottomOf="@id/clothes_inner_rent_price_title_layout">
 
 
                 <Button
-                    android:id="@+id/view_clothes_inner_buy_button"
-                    android:layout_width="0dp"
+                    android:id="@+id/view_clothes_inner_request_button"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="Buy"/>
-
-                <Button
-                    android:id="@+id/view_clothes_inner_borrow_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="Borrow"/>
-
+                    android:text="Request"/>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/clothes_inner_type_title_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:text="Type:"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_clothes_inner_buttons_layout"/>
 
-            <TextView
-                android:id="@+id/clothes_inner_type_value_text_view"
-                android:layout_width="wrap_content"
+            <!--DETAILS PART-->
+
+
+            <LinearLayout
+                android:id="@+id/clothes_inner_type_title_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:textStyle="italic"
-                app:layout_constraintStart_toEndOf="@id/clothes_inner_type_title_text_view"
                 app:layout_constraintTop_toBottomOf="@id/view_clothes_inner_buttons_layout"
-                tools:text="Dress"/>
+                >
 
-            <TextView
-                android:id="@+id/clothes_inner_brand_title_text_view"
-                android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_weight="0.3"
+                    android:background="@color/colorPrimaryHalfDark"
+                    >
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Type"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:background="@color/colorPrimaryLight">
+
+
+                    <TextView
+                        android:id="@+id/clothes_inner_type_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        tools:text="T-shirt"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/clothes_inner_size_title_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_medium"
-                android:text="Brand:"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/clothes_inner_type_value_text_view"/>
+                android:layout_marginTop="@dimen/margin_small_x"
+                app:layout_constraintTop_toBottomOf="@id/clothes_inner_type_title_layout"
+                >
 
-            <TextView
-                android:id="@+id/clothes_inner_brand_value_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="italic"
-                app:layout_constraintStart_toStartOf="@id/clothes_inner_type_value_text_view"
-                app:layout_constraintTop_toBottomOf="@id/clothes_inner_type_value_text_view"
-                tools:text="Gucci"/>
 
-            <TextView
-                android:id="@+id/clothes_inner_color_title_text_view"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:background="@color/colorPrimaryHalfDark">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Size"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:background="@color/colorPrimaryLight">
+
+
+                    <TextView
+                        android:id="@+id/clothes_inner_size_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        tools:text="XL"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/clothes_inner_brand_title_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_medium"
-                android:text="Color:"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/clothes_inner_brand_value_text_view"/>
+                android:layout_marginTop="@dimen/margin_small_x"
+                app:layout_constraintTop_toBottomOf="@id/clothes_inner_size_title_layout"
+                >
 
-            <TextView
-                android:id="@+id/clothes_inner_color_value_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="italic"
-                app:layout_constraintStart_toStartOf="@id/clothes_inner_brand_value_text_view"
-                app:layout_constraintTop_toBottomOf="@id/clothes_inner_brand_value_text_view"
-                tools:text="Red"/>
 
-            <TextView
-                android:id="@+id/clothes_inner_size_title_text_view"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:background="@color/colorPrimaryHalfDark">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Brand"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:background="@color/colorPrimaryLight">
+
+
+                    <TextView
+                        android:id="@+id/clothes_inner_brand_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        tools:text="Salomon"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/clothes_inner_color_title_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_medium"
-                android:text="Size:"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/clothes_inner_color_title_text_view"
-                />
+                android:layout_marginTop="@dimen/margin_small_x"
+                app:layout_constraintTop_toBottomOf="@id/clothes_inner_brand_title_layout"
+                >
 
-            <TextView
-                android:id="@+id/clothes_inner_size_value_text_view"
-                android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:background="@color/colorPrimaryHalfDark">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Color"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:background="@color/colorPrimaryLight">
+
+
+                    <TextView
+                        android:id="@+id/clothes_inner_color_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Black"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/clothes_inner_gender_title_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/clothes_inner_color_value_text_view"
-                app:layout_constraintTop_toBottomOf="@id/clothes_inner_color_value_text_view"
-                tools:text="38"/>
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small_x"
+                app:layout_constraintTop_toBottomOf="@id/clothes_inner_color_title_layout"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:background="@color/colorPrimaryHalfDark">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Gender"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:background="@color/colorPrimaryLight">
+
+
+                    <TextView
+                        android:id="@+id/clothes_inner_gender_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        tools:text="Female"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/clothes_inner_usage_status_title_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small_x"
+                app:layout_constraintTop_toBottomOf="@id/clothes_inner_gender_title_layout"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:background="@color/colorPrimaryHalfDark">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Status"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:background="@color/colorPrimaryLight">
+
+
+                    <TextView
+                        android:id="@+id/clothes_inner_usage_status_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        tools:text="New"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/clothes_inner_description_title_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small_x"
+                app:layout_constraintTop_toBottomOf="@id/clothes_inner_gender_title_layout"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:background="@color/colorPrimaryHalfDark">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        android:text="Description"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:background="@color/colorPrimaryLight">
+
+
+                    <TextView
+                        android:id="@+id/clothes_inner_description_value_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_medium"
+                        android:padding="@dimen/margin_small"
+                        tools:text="It's great. Good as new! lets test ehat alskdn asdlkhasd askldhasd asldihasd"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--<TextView-->
+            <!--android:id="@+id/clothes_inner_type_title_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="@dimen/margin_medium"-->
+            <!--android:layout_marginTop="@dimen/margin_medium"-->
+            <!--android:text="Type:"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/test3"/>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/clothes_inner_type_value_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginTop="@dimen/margin_medium"-->
+            <!--android:textStyle="italic"-->
+            <!--app:layout_constraintStart_toEndOf="@id/clothes_inner_type_title_text_view"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/test3"-->
+            <!--tools:text="Dress"/>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/clothes_inner_brand_title_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="@dimen/margin_medium"-->
+            <!--android:text="Brand:"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/clothes_inner_type_value_text_view"/>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/clothes_inner_brand_value_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textStyle="italic"-->
+            <!--app:layout_constraintStart_toStartOf="@id/clothes_inner_type_value_text_view"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/clothes_inner_type_value_text_view"-->
+            <!--tools:text="Gucci"/>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/clothes_inner_color_title_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="@dimen/margin_medium"-->
+            <!--android:text="Color:"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/clothes_inner_brand_value_text_view"/>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/clothes_inner_color_value_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textStyle="italic"-->
+            <!--app:layout_constraintStart_toStartOf="@id/clothes_inner_brand_value_text_view"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/clothes_inner_brand_value_text_view"-->
+            <!--tools:text="Red"/>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/clothes_inner_size_title_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="@dimen/margin_medium"-->
+            <!--android:text="Size:"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/clothes_inner_color_title_text_view"-->
+            <!--/>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/clothes_inner_size_value_text_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toStartOf="@id/clothes_inner_color_value_text_view"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/clothes_inner_color_value_text_view"-->
+            <!--tools:text="38"/>-->
 
 
             <TextView
                 android:id="@+id/clothes_inner_report_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:gravity="center"
+                android:textSize="14sp"
                 android:text="@string/report"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:drawableStart="@drawable/ic_report_24dp"
+                android:drawablePadding="@dimen/margin_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clothes_inner_description_title_layout"
+
+                />
 
 
         </android.support.constraint.ConstraintLayout>

@@ -4,35 +4,88 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_snow">
+    android:background="@color/white_snow"
+    android:paddingStart="@dimen/margin_medium"
+    android:paddingEnd="@dimen/margin_medium">
 
-    <EditText
-        android:id="@+id/search_size_edit_text"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/search_condition_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Size: e.g. '38'"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_medium"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
-    <EditText
-        android:id="@+id/search_type_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Type: e.g. 'Shirt'"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_size_edit_text"/>
+        <TextView
+            android:id="@+id/search_type_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:text="Select Type"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/search_size_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="Select Size"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/search_type_text_view"
+            />
+
+        <TextView
+            android:id="@+id/search_brand_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="Select Brand"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/search_size_text_view"
+            />
+
+        <TextView
+            android:id="@+id/search_color_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="Select Color"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/search_brand_text_view"
+            />
+
+        <TextView
+            android:id="@+id/search_gender_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="Select Gender"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/search_color_text_view"
+            />
+    </android.support.constraint.ConstraintLayout>
 
     <Button
         android:id="@+id/search_search_button"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:enabled="false"
         android:text="Search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_type_edit_text"/>
+        app:layout_constraintTop_toBottomOf="@id/search_condition_layout"/>
 
 
     <android.support.v7.widget.RecyclerView

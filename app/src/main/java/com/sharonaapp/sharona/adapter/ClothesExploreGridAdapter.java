@@ -3,6 +3,7 @@ package com.sharonaapp.sharona.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,23 @@ import com.bumptech.glide.Glide;
 import com.sharonaapp.sharona.R;
 import com.sharonaapp.sharona.interfaces.LikeItemClickListener;
 import com.sharonaapp.sharona.interfaces.ListItemClickListener;
-import com.sharonaapp.sharona.model.response.Clothes;
+import com.sharonaapp.sharona.manager.LikeManager;
+import com.sharonaapp.sharona.model.general.Clothes;
+import com.sharonaapp.sharona.model.response.LikeResponse;
+import com.sharonaapp.sharona.network.Api;
+import com.sharonaapp.sharona.network.NetworkManager;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.sharonaapp.sharona.network.Url.BASE_URL;
+
 public class ClothesExploreGridAdapter extends BaseAdapter {
+
+    private static final String TAG = "ClothesExploreGridAdapt";
 
     private final ArrayList<Clothes> clothesArrayList;
     private final Context context;
@@ -80,11 +93,21 @@ public class ClothesExploreGridAdapter extends BaseAdapter {
         Clothes clothes = clothesArrayList.get(position);
         if (clothes.getImages() != null && clothes.getImages().size() > 0)
         {
-            Glide.with(context).load(clothes.getImages().get(0)).into(imageView);
+            Glide.with(context).load(BASE_URL + clothes.getImages().get(0).getPath()).into(imageView);
         }
         brandTextView.setText(clothes.getType() + " " + clothes.getBrand());
         sizeTextView.setText("Size " + String.valueOf(clothes.getSize()));
         rentalPriceTexrView.setText(String.valueOf(clothes.getRentPrice()) + "$");
+
+        if (LikeManager.getInstance().isAlreadyLiked(clothes.getId()))
+        {
+            Glide.with(context).load(R.drawable.ic_like_liked_24dp).into(likeImageView);
+        }
+        else
+        {
+            Glide.with(context).load(R.drawable.ic_like_not_liked_24dp).into(likeImageView);
+
+        }
 
         if (listItemClickListener != null)
         {
@@ -100,14 +123,49 @@ public class ClothesExploreGridAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view)
                 {
-                    likeItemClickListener.itemInListLiked(position);
-                    likeImageView.setColorFilter(null);
+
+//                    likeItemClickListener.itemInListLiked(position, clothesArrayList.get(position).getId());
+//                    likeImageView.setColorFilter(null);
+                    switchLike(LikeManager.getInstance().toggleLikeClothes(clothesArrayList.get(position).getId()), likeImageView);
+                    triggerLikeServer(clothesArrayList.get(position).getId());
+
+
                 }
             });
         }
 
 
         return convertView;
+    }
+
+    private void triggerLikeServer(int id)
+    {
+        NetworkManager.getInstance().getEndpointApi(Api.class).triggerLike(id).enqueue(new Callback<LikeResponse>() {
+            @Override
+            public void onResponse(Call<LikeResponse> call, Response<LikeResponse> response)
+            {
+                Log.d(TAG, "onResponse: ");
+            }
+
+            @Override
+            public void onFailure(Call<LikeResponse> call, Throwable t)
+            {
+                Log.d(TAG, "onFailure: ");
+            }
+        });
+    }
+
+    private void switchLike(boolean isLiked, ImageView likeImageView)
+    {
+        if (isLiked)
+        {
+            Glide.with(context).load(R.drawable.ic_like_liked_24dp).into(likeImageView);
+        }
+        else
+        {
+            Glide.with(context).load(R.drawable.ic_like_not_liked_24dp).into(likeImageView);
+
+        }
     }
 
     @NonNull
@@ -118,6 +176,7 @@ public class ClothesExploreGridAdapter extends BaseAdapter {
             public void onClick(View view)
             {
                 listItemClickListener.itemInListClicked(position);
+
 
             }
         };

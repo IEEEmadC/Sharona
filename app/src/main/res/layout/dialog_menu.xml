@@ -27,7 +27,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_home_ic"/>
+                android:src="@drawable/ic_home_24dp"/>
 
 
             <TextView
@@ -51,7 +51,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_home_ic"/>
+                android:src="@drawable/ic_home_24dp"/>
 
             <TextView
                 android:id="@+id/menu_sign_up_text_view"
@@ -75,7 +75,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_home_ic"/>
+                android:src="@drawable/ic_home_24dp"/>
 
             <TextView
                 android:id="@+id/menu_inbox_text_view"
@@ -100,7 +100,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/icc_search"/>
+                android:src="@drawable/ic_search_24dp"/>
 
             <TextView
                 android:id="@+id/menu_search_text_view"
@@ -124,7 +124,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_profile"/>
+                android:src="@drawable/ic_profile_24dp"/>
 
             <TextView
                 android:id="@+id/menu_profile_text_view"
@@ -148,7 +148,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_settings_ic"/>
+                android:src="@drawable/ic_close_24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -171,7 +171,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_settings_ic"/>
+                android:src="@drawable/ic_close_24dp"/>
 
             <TextView
                 android:id="@+id/menu_logout_text_view"

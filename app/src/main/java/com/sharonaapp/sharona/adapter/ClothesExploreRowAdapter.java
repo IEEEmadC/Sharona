@@ -11,30 +11,33 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.sharonaapp.sharona.R;
-import com.sharonaapp.sharona.model.response.Clothes;
+import com.sharonaapp.sharona.model.general.Clothes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.sharonaapp.sharona.network.Url.BASE_URL;
+
 public class ClothesExploreRowAdapter extends RecyclerView.Adapter<ClothesExploreRowAdapter.ClothesViewHolder> {
 
-    private ArrayList<Clothes> clothesArrayList;
+    private List<Clothes> clothesArrayList;
 
-    public ClothesExploreRowAdapter(ArrayList<Clothes> clothesArrayList)
+    public ClothesExploreRowAdapter(List<Clothes> clothesArrayList)
     {
         this.clothesArrayList = clothesArrayList;
     }
 
-    public ClothesExploreRowAdapter()
-    {
-        // if adapter is built through this constructor, make sure that at least one of addClothes methods
-        //  is called before using the adapter
-        // if (clothesArrayList == null){
-        //            throw new NullPointerException("clothes can not be null");
-        //        }
-    }
+//    public ClothesExploreRowAdapter(ArrayList<SearchResponse.SearchData> list)
+//    {
+//        // if adapter is built through this constructor, make sure that at least one of uploadClothes methods
+//        //  is called before using the adapter
+//        // if (clothesArrayList == null){
+//        //            throw new NullPointerException("clothes can not be null");
+//        //        }
+//    }
 
     public void addClothes(Clothes clothes)
     {
@@ -78,13 +81,13 @@ public class ClothesExploreRowAdapter extends RecyclerView.Adapter<ClothesExplor
         holder.typeTextView.setText(clothes.getType());
         holder.sizeTextView.setText(clothes.getSize());
         holder.brandTextView.setText(clothes.getBrand());
-        holder.priceForBuyTextView.setText("Buy : " + clothes.getBuyPrice());
-        holder.priceForRentTextView.setText("Rent : " + clothes.getRentPrice());
+        holder.priceForBuyTextView.setText("Buy : " + clothes.getBuyPrice() + "$");
+        holder.priceForRentTextView.setText("Rent : " + clothes.getRentPrice() + "$");
 
         if (holder.brandTextView.getContext() != null && clothes.getImages() != null && clothes.getImages().size() > 0)
         {
             Glide.with(holder.brandTextView.getContext())
-                    .load(clothes.getImages().get(0))
+                    .load(BASE_URL + clothes.getImages().get(0).getPath())
                     .apply(new RequestOptions().placeholder(R.drawable.image_upload_place_holder))
                     .into(holder.clothesImageView);
         }

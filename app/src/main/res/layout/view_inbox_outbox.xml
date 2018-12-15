@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_snow">
@@ -19,24 +20,29 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableStart="@drawable/ic_arrow_downward_24dp"
             android:gravity="center"
             android:paddingStart="16dp"
-            android:textColor="@color/textOnPrimaryColor"
             android:paddingEnd="16dp"
-            android:text="Inbox"/>
+            android:text="Inbox"
+            android:textColor="@color/textOnPrimaryColor"/>
 
         <TextView
             android:id="@+id/inbox_outbox_selecting_outbox_text_view"
+            fontPath="fonts/myriad_pro_bold.ttf"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_arrow_upward_24dp"
             android:gravity="center"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:text="Outbox"/>
+            android:text="Outbox"
+            tools:ignore="MissingPrefix"/>
 
         <TextView
             android:id="@+id/inbox_outbox_selecting_transaction_text_view"
+            fontPath="fonts/myriad_pro_bold.ttf"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -44,9 +50,30 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="Transactions"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            tools:ignore="MissingPrefix"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/inbox_outbox_inbox_message_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="No request for your clothes yet!\n Have you add some clothes to sell ?"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inbox_outbox_selecting_box_selection_layout"/>
+
+    <TextView
+        android:id="@+id/inbox_outbox_outbox_message_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="You have not requested anything!\nTry sending some requests"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inbox_outbox_selecting_box_selection_layout"
+        android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/inbox_outbox_inbox_recycler_view"
@@ -64,12 +91,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inbox_outbox_selecting_box_selection_layout"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/inbox_outbox_transactions_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inbox_outbox_selecting_box_selection_layout"/>
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/inbox_outbox_transactions_recycler_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/inbox_outbox_selecting_box_selection_layout"/>-->
 
 </android.support.constraint.ConstraintLayout>

@@ -3,13 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white_snow"
+    android:paddingTop="@dimen/margin_large">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/tour_view_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/test_color"
         app:layout_constraintBottom_toTopOf="@id/tour_page_bottom_layout"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -44,22 +45,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next"
+            android:textSize="18sp"
+            android:padding="@dimen/margin_small"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-        <TextView
-            android:id="@+id/tour_next_text_view2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BODY"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
 
-        <ImageView
-            android:id="@+id/easy_test"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:src="@drawable/img_001"/>
 
     </android.support.constraint.ConstraintLayout>
 

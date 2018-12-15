@@ -79,7 +79,7 @@ public class ConfigDataGen {
         colorArrayList.add("Red");
         colorArrayList.add("Silver");
         colorArrayList.add("Teal");
-        colorArrayList.add("violet");
+        colorArrayList.add("Violet");
         colorArrayList.add("White");
         colorArrayList.add("Yellow");
 

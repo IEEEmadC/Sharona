@@ -48,7 +48,7 @@ public class NotificationManager {
     public void showNotif(Context context)
     {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "CHANNEL_ID")
-                .setSmallIcon(R.drawable.anim_sharona_logo)
+                .setSmallIcon(R.drawable.ic_sharona_logo)
                 .setContentTitle("textTitle")
                 .setContentText("textContent")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
@@ -61,7 +61,7 @@ public class NotificationManager {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             Notification.Builder builder = new Notification.Builder(context, "CHANNEL_ID")
-                    .setSmallIcon(R.drawable.anim_sharona_logo)
+                    .setSmallIcon(R.drawable.ic_sharona_logo)
                     .setContentTitle(notificationTitle)
                     .setContentText(notificationContent)
                     .setAutoCancel(false);
@@ -89,7 +89,7 @@ public class NotificationManager {
             android.app.NotificationManager notificationManager = (android.app.NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "CHANNEL_ID")
-                    .setSmallIcon(R.drawable.anim_sharona_logo)
+                    .setSmallIcon(R.drawable.ic_sharona_logo)
                     .setContentTitle(notificationTitle)
                     .setContentText(notificationContent)
 //                    .setVibrate()

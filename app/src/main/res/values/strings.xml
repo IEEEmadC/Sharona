@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Sharona</string>
-    <string name="mapbox_access_token">pk.eyJ1Ijoic2hlcnZpbm94IiwiYSI6ImNqbmhvODBjYjBlbTEzdnFmdjQwZHRhZnYifQ.AJIyKUovRxF1jcFRtWjxow</string>
     <string name="your_email">your email</string>
     <string name="password">password</string>
 
     <string name="report">Report</string>
+    <string name="report_with_desc">Something wrong? \nReport</string>
 
     <string name="image_is_inappropriate">Image is inappropriate</string>
     <string name="details_are_wrong">Details are wrong</string>

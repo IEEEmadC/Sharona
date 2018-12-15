@@ -26,11 +26,13 @@
 
     <ImageView
         android:id="@+id/item_explore_grid_layout_image_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:maxHeight="200dp"
+        android:minHeight="200dp"
         android:paddingStart="1dp"
         android:paddingEnd="1dp"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -48,8 +50,8 @@
         <!--suppress AndroidUnknownAttribute -->
         <TextView
             android:id="@+id/item_explore_grid_layout_brand_textView"
-            fontPath="fonts/f1.ttf"
             android:layout_width="wrap_content"
+            fontPath="fonts/myriad_pro_bold.ttf"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small_x"
             tools:ignore="MissingPrefix"
@@ -58,9 +60,10 @@
         <!--suppress AndroidUnknownAttribute -->
         <TextView
             android:id="@+id/item_explore_grid_layout_size_textView"
-            fontPath="fonts/f1.ttf"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            fontPath="fonts/myriad_pro_bold.ttf"
             android:layout_marginBottom="@dimen/margin_small_x"
             tools:ignore="MissingPrefix"
             tools:text="Small"/>
@@ -68,7 +71,7 @@
         <!--suppress AndroidUnknownAttribute -->
         <TextView
             android:id="@+id/item_explore_grid_layout_rental_price_textView"
-            fontPath="fonts/f1.ttf"
+            fontPath="fonts/myriad_pro_bold.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small_x"
@@ -80,7 +83,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginBottom="@dimen/margin_small"
-            android:src="@drawable/ic_like"/>
+            android:src="@drawable/ic_like_not_liked_24dp"/>
     </LinearLayout>
 
 

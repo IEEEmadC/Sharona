@@ -8,124 +8,83 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.HamButton;
-import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.OnBoomListener;
 import com.sharonaapp.sharona.R;
-import com.sharonaapp.sharona.adapter.MainPagerAdapter;
-import com.sharonaapp.sharona.custom_ui.MenuDialog;
-import com.sharonaapp.sharona.fragment.AddClothesFragment;
-import com.sharonaapp.sharona.fragment.ClothesInnerFragment;
 import com.sharonaapp.sharona.fragment.ExploreFragment;
-import com.sharonaapp.sharona.fragment.InboxOutboxFragment;
-import com.sharonaapp.sharona.fragment.LoginFragment;
-import com.sharonaapp.sharona.fragment.MyClosetFragment;
-import com.sharonaapp.sharona.fragment.ProfileFragment;
-import com.sharonaapp.sharona.fragment.SearchFragment;
-import com.sharonaapp.sharona.fragment.SettingFragment;
-import com.sharonaapp.sharona.fragment.SignUpFragment;
-import com.sharonaapp.sharona.interfaces.BackButtonClickListener;
-import com.sharonaapp.sharona.model.response.Clothes;
+import com.sharonaapp.sharona.manager.LoginLogoutStateManager;
+import com.sharonaapp.sharona.model.general.Clothes;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.fragment.FragmentNavigator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static androidx.navigation.Navigation.findNavController;
-import static androidx.navigation.ui.NavigationUI.setupWithNavController;
 import static com.sharonaapp.sharona.manager.CallManager.MY_PERMISSIONS_REQUEST_CALL_PHONE;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-
-//    private static final int RC_SIGN_IN = 123;
-
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1002;
     public static final int LOGIN_SET = 2000;
 
-    private int activeTab;
-    public static final int TAB_ADD_CLOTHES_INDEX = 0;
-    public static final int TAB_EXPLORE_INDEX = 1;
-    public static final int TAB_MY_CLOSET = 2;
     public static final int TAB_LOGIN = 3;
 
-    private ExploreFragment exploreFragment;
-    private AddClothesFragment addClothesFragment;
-    private LoginFragment loginFragment;
-    private SignUpFragment signUpFragment;
-    private MyClosetFragment myClosetFragment;
-    private ProfileFragment profileFragment;
-    private FragmentTransaction ft;
-    private List<Integer> destinationList = new ArrayList<>();
-
-//    MainPagerAdapter mainPagerAdapter;
-
-//    @BindView(R.id.activity_main_frame_layout)
-//    public FrameLayout frameLayout;
-
-//    @BindView(R.id.tab_layout)
-//    public MainTabBar mainTabBar;
-//    private BackButtonClickListener backButtonClickListener;
-//    private Fragment fragment;
 
     @BindView(R.id.toolbar)
     public ConstraintLayout toolbarLayout;
-//    private Resources resourcesForApplication;
+
+    @BindView(R.id.main_activity_loading_view)
+    public FrameLayout loadingLayout;
+    @BindView(R.id.loading_spin_kit)
+    public SpinKitView loadingSpinKit;
+
+    public NavController addClothesNavController;
+    public NavController exploreNavController;
+    public NavController mapNavController;
+    public NavController myClosetNavController;
+    public NavController menuOriginatedNavController;
 
     @BindView(R.id.main_activity_bottom_navigation_view)
     BottomNavigationView bottomNavigationView;
-    private MainPagerAdapter mainPagerAdapter;
-
-    private NavController navController;
-    private NavController addClothesNavController;
-
-//     ;
 
     @BindView(R.id.activity_main_add_clothes_nav_host_fragment)
-    View addClothesNavHostFragment;
-    @BindView(R.id.activity_main_nav_host_fragment)
-    View mainNavHostFragment;
+    public View addClothesNavHostFragment;
+    @BindView(R.id.activity_main_explore_nav_host_fragment)
+    View exploreNavHostFragment;
+    @BindView(R.id.activity_main_map_nav_host_fragment)
+    View mapNavHostFragment;
+    @BindView(R.id.activity_main_my_closet_nav_host_fragment)
+    View myClosetNavHostFragment;
+    @BindView(R.id.activity_main_menu_originated_items_nav_host_fragment)
+    View menuOriginatedItemsNavHostFragment;
 
 
     @BindView(R.id.bmb)
-    BoomMenuButton boomMenuButton;
-
-
-    @OnClick(R.id.toolbar_menu_text_view_container_layout)
-    public void onToolbarMenuClicked()
-    {
-        new MenuDialog(this).show();
-    }
+    public BoomMenuButton boomMenuButton;
 
 
     @Override
@@ -136,13 +95,19 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-//        addClothesNavHostFragment = findViewById(R.id.activity_main_add_clothes_nav_host_fragment);
+        addClothesNavHostFragment.setVisibility(View.GONE);
+        menuOriginatedItemsNavHostFragment.setVisibility(View.GONE);
+        mapNavHostFragment.setVisibility(View.GONE);
+        myClosetNavHostFragment.setVisibility(View.GONE);
 
-
-        navController = findNavController(this, R.id.activity_main_nav_host_fragment);
         addClothesNavController = findNavController(this, R.id.activity_main_add_clothes_nav_host_fragment);
+        exploreNavController = findNavController(this, R.id.activity_main_explore_nav_host_fragment);
+        mapNavController = findNavController(this, R.id.activity_main_map_nav_host_fragment);
+        myClosetNavController = findNavController(this, R.id.activity_main_my_closet_nav_host_fragment);
+        menuOriginatedNavController = findNavController(this, R.id.activity_main_menu_originated_items_nav_host_fragment);
 
-//        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+
+//        exploreNavController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
 //            @Override
 //            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments)
 //            {
@@ -152,81 +117,77 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //                }
 //            }
 //        });
-        //setupWithNavController(bottomNavigationView, navController);
+        //setupWithNavController(bottomNavigationView, exploreNavController);
 
-//        navController.navigate();
+//        exploreNavController.navigate();
 
 
 //        LocaleHelper.changeAppLocale(this, LOCALE_ENGLISH);
 //        LocaleHelper.changeAppLocaleFromSharedPrefIfNeeded(this, true);
 //        LocaleHelper.changeLayoutDirectionBasedOnLocale(getWindow().getDecorView());
 
-//        mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), frameLayout);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
+        bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId())
             {
-                switch (menuItem.getItemId())
+                case (R.id.item_add_clothes):
                 {
-                    case (R.id.item_add_clothes):
+                    if (!LoginLogoutStateManager.getInstance().isUserLogedIn())
                     {
-                        Log.d(TAG, "onNavigationItemSelected: ADD");
-                        //mainPagerAdapter.switchTab(0);
-
-//                        navigateTo(R.id.item_add_clothes);
-                        addClothesNavHostFragment.setVisibility(View.VISIBLE);
-                        mainNavHostFragment.setVisibility(View.GONE);
-
-//                        getSupportFragmentManager().beginTransaction().add(frameLayout.getId(), mainPagerAdapter.getDefaultFragmentForTab(0)).commit();
-                        return true;
+                        Toast.makeText(this, "Please Login or Sign up first!", Toast.LENGTH_SHORT).show();
+                        routeToLoginFragment();
+                        return false;
                     }
-                    case (R.id.item_explore):
-                    {
-                        Log.d(TAG, "onNavigationItemSelected: Explore");
-                        //mainPagerAdapter.switchTab(1);
-
-//                        navigateTo(R.id.item_explore);
-                        mainNavHostFragment.setVisibility(View.VISIBLE);
-                        addClothesNavHostFragment.setVisibility(View.GONE);
-                        return true;
-                    }
-
-                    case (R.id.item_closet):
-                    {
-                        Log.d(TAG, "onNavigationItemSelected: Closet");
-//                        mainPagerAdapter.switchTab(2);
-
-                        navigateTo(R.id.item_closet);
-                        return true;
-                    }
+                    addClothesNavHostFragment.setVisibility(View.VISIBLE);
+                    exploreNavHostFragment.setVisibility(View.GONE);
+                    mapNavHostFragment.setVisibility(View.GONE);
+                    myClosetNavHostFragment.setVisibility(View.GONE);
+                    menuOriginatedItemsNavHostFragment.setVisibility(View.GONE);
+                    return true;
                 }
-                return false;
+                case (R.id.item_explore):
+                {
+                    exploreNavHostFragment.setVisibility(View.VISIBLE);
+                    addClothesNavHostFragment.setVisibility(View.GONE);
+                    mapNavHostFragment.setVisibility(View.GONE);
+                    myClosetNavHostFragment.setVisibility(View.GONE);
+                    menuOriginatedItemsNavHostFragment.setVisibility(View.GONE);
+                    return true;
+                }
+
+                case (R.id.item_map):
+                {
+                    mapNavHostFragment.setVisibility(View.VISIBLE);
+                    exploreNavHostFragment.setVisibility(View.GONE);
+                    addClothesNavHostFragment.setVisibility(View.GONE);
+                    myClosetNavHostFragment.setVisibility(View.GONE);
+                    menuOriginatedItemsNavHostFragment.setVisibility(View.GONE);
+
+                    return true;
+                }
+
+                case (R.id.item_closet):
+                {
+                    if (!LoginLogoutStateManager.getInstance().isUserLogedIn())
+                    {
+                        Toast.makeText(this, "Please Login or Sign up first!", Toast.LENGTH_SHORT).show();
+                        routeToLoginFragment();
+                        return false;
+                    }
+
+                    myClosetNavHostFragment.setVisibility(View.VISIBLE);
+                    mapNavHostFragment.setVisibility(View.GONE);
+                    exploreNavHostFragment.setVisibility(View.GONE);
+                    addClothesNavHostFragment.setVisibility(View.GONE);
+                    menuOriginatedItemsNavHostFragment.setVisibility(View.GONE);
+
+                    return true;
+                }
             }
+            return false;
         });
 
-//        nonSwipeableViewPager.setAdapter(mainPagerAdapter);
-//        nonSwipeableViewPager.addOnPageChangeListener(this);
-//        nonSwipeableViewPager.setOffscreenPageLimit(3);
-//        mainTabBar.setViewPager(nonSwipeableViewPager);
-//
-//        getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout()
-//            {
-//                if (savedInstanceState == null)
-//                {
-//                    nonSwipeableViewPager.setCurrentItem(activeTab, false);
-////                    handleIntent();
-//                }
-//
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-//                {
-//                    getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                }
-//
-//            }
-//        });
+        bottomNavigationView.setSelectedItemId(R.id.item_explore);
+
 
         checkPermissions();
 
@@ -262,49 +223,141 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //                        .build(),
 //                RC_SIGN_IN);
 
-
-//        for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++) {
-//            SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder()
-//                    .normalImageRes(R.drawable.ic_close);
-//            boomMenuButton.addBuilder(builder);
-//        }
-
-        for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++) {
-            HamButton.Builder builder = new HamButton.Builder()
-                    .normalImageRes(R.drawable.ic_close)
-                    .normalTextRes(R.string.app_name)
-                    .subNormalTextRes(R.string.channel_name);
-            boomMenuButton.addBuilder(builder);
-        }
-
+        initMenu();
 
 
     }
 
-    private boolean isInStack(int destinationId)
+
+    private void initMenu()
     {
-        boolean isDestinationInStack = false;
-        for (Integer id : destinationList)
-        {
-            if(id == destinationId)
+
+        HamButton.Builder loginBuilder = new HamButton.Builder()
+                .normalImageRes(R.drawable.ic_login)
+                .normalText("Login")
+                .subNormalText("Login to your account")
+                .normalColor(R.color.colorPrimary);
+
+        HamButton.Builder signUpBuilder = new HamButton.Builder()
+                .normalImageRes(R.drawable.ic_sign_up)
+                .normalText("Sign up")
+                .subNormalText("Create account")
+                .pieceColor(R.color.colorPrimary);
+
+        HamButton.Builder searchBuilder = new HamButton.Builder()
+                .normalImageRes(R.drawable.ic_search_24dp)
+                .normalText("Search")
+                .subNormalText("Search through clothes").highlightedColor(R.color.colorPrimary);
+
+        HamButton.Builder profileBuilder = new HamButton.Builder()
+                .normalImageRes(R.drawable.ic_profile_24dp)
+                .normalText("Profile")
+                .subNormalText("Profile details");
+
+        HamButton.Builder inboxOutboxBuilder = new HamButton.Builder()
+                .normalImageRes(R.drawable.ic_inbox_outbox)
+                .normalText("Inbox-Outbox")
+                .subNormalText("Check your requests & requests sent to you");
+
+        boomMenuButton.addBuilder(loginBuilder);
+        boomMenuButton.addBuilder(signUpBuilder);
+        boomMenuButton.addBuilder(searchBuilder);
+        boomMenuButton.addBuilder(profileBuilder);
+        boomMenuButton.addBuilder(inboxOutboxBuilder);
+
+        boomMenuButton.setNormalColor(R.color.colorPrimary);
+
+
+        boomMenuButton.setOnBoomListener(new OnBoomListener() {
+            @Override
+            public void onClicked(int index, BoomButton boomButton)
             {
-                isDestinationInStack = true;
-                break;
+                switch (index)
+                {
+                    case 0:
+                    {
+                        menuOriginatedNavController.navigate(R.id.item_login);
+
+                        setupVisibilityForMenuOriginatedItems();
+
+                        break;
+                    }
+                    case 1:
+                    {
+                        menuOriginatedNavController.navigate(R.id.item_sign_up);
+
+                        setupVisibilityForMenuOriginatedItems();
+                        break;
+                    }
+                    case 2:
+                    {
+                        menuOriginatedNavController.navigate(R.id.item_search);
+
+                        setupVisibilityForMenuOriginatedItems();
+
+                        break;
+                    }
+                    case 3:
+                    {
+                        menuOriginatedNavController.navigate(R.id.item_profile);
+
+                        setupVisibilityForMenuOriginatedItems();
+
+                        break;
+                    }
+
+                    case 4:
+                    {
+                        menuOriginatedNavController.navigate(R.id.item_inbox_outbox);
+
+                        setupVisibilityForMenuOriginatedItems();
+
+                        break;
+                    }
+
+
+                }
             }
-        }
-        return isDestinationInStack;
+
+            @Override
+            public void onBackgroundClick()
+            {
+
+            }
+
+            @Override
+            public void onBoomWillHide()
+            {
+
+            }
+
+            @Override
+            public void onBoomDidHide()
+            {
+
+            }
+
+            @Override
+            public void onBoomWillShow()
+            {
+
+            }
+
+            @Override
+            public void onBoomDidShow()
+            {
+
+            }
+        });
     }
 
-    private void navigateTo(int destinationId)
+    private void setupVisibilityForMenuOriginatedItems()
     {
-        if(isInStack(destinationId))
-        {
-            navController.popBackStack(destinationId, false);
-        }
-        else
-        {
-            navController.navigate(destinationId);
-        }
+        menuOriginatedItemsNavHostFragment.setVisibility(View.VISIBLE);
+        addClothesNavHostFragment.setVisibility(View.GONE);
+        exploreNavHostFragment.setVisibility(View.GONE);
+        mapNavHostFragment.setVisibility(View.GONE);
+        myClosetNavHostFragment.setVisibility(View.GONE);
     }
 
     @Override
@@ -503,166 +556,39 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     public void routeToClothesInnerFragment(ExploreFragment initiatorFragment, Clothes clothes)
     {
-        if (initiatorFragment == null)
-        {
-            ft = getSupportFragmentManager().beginTransaction();
-        }
-        else
-        {
-            ft = initiatorFragment.getParentFragment().getChildFragmentManager().beginTransaction();
-        }
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("CLOTHES_TO_BE_SHOWN", clothes);
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("CLOTHES_TO_BE_SHOWN", clothes);
 
 
-        ClothesInnerFragment fragment = new ClothesInnerFragment();
-        fragment.setArguments(bundle);
-        ft.replace(R.id.fragment_base_fragment_container, fragment);
-        ft.commit();
-    }
+//        ClothesInnerFragment fragment = new ClothesInnerFragment();
+//        fragment.setArguments(bundle);
 
-    public void routeToSettingFragment()
-    {
-        openFragmentInOverLay(new SettingFragment());
     }
 
     public void routeToLoginFragment()
     {
-//        mainPagerAdapter.addFragmentOnTop(new LoginFragment());
-//        openFragmentInOverLay(new LoginFragment());
-        navController.navigate(R.id.item_add_clothes);
+        menuOriginatedNavController.navigate(R.id.item_login);
+        setupVisibilityForMenuOriginatedItems();
+
     }
 
     public void routeToSignUpFragment()
     {
-        openFragmentInOverLay(new SignUpFragment());
+        menuOriginatedNavController.navigate(R.id.item_sign_up);
+        setupVisibilityForMenuOriginatedItems();
+
     }
 
-    private void routeToMyClosetFragment()
-    {
-        openFragmentInOverLay(new MyClosetFragment());
-    }
-
-    public void routeToInboxOutBoxFragment()
-    {
-        openFragmentInOverLay(new InboxOutboxFragment());
-    }
-
-    public void routeToSearchFragment()
-    {
-        openFragmentInOverLay(new SearchFragment());
-    }
-
-    public void routeToProfileFragment()
-    {
-        openFragmentInOverLay(new ProfileFragment());
-    }
 
     public void routeExploreFragment()
     {
-        openFragment(new ExploreFragment());
+        exploreNavController.navigate(R.id.item_explore);
+
+        exploreNavHostFragment.setVisibility(View.VISIBLE);
+        addClothesNavHostFragment.setVisibility(View.GONE);
+        menuOriginatedItemsNavHostFragment.setVisibility(View.GONE);
     }
-
-
-    @Override
-    public void onPageScrolled(int i, float v, int i1)
-    {
-
-    }
-
-    @Override
-    public void onPageSelected(int position)
-    {
-//        activeTab = position;
-//
-//        HostFragment hostFragment = (HostFragment) mainPagerAdapter.getItem(position);
-//        if (!hostFragment.hasContent())
-//        {
-//            openFragmentNoTransition(mainPagerAdapter.getDefaultFragmentForTab(position));
-//        }
-//        else
-//        {
-//        }
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int i)
-    {
-
-    }
-
-//    public MainPagerAdapter getMainPagerAdapter()
-//    {
-//        return mainPagerAdapter;
-//    }
-
-    public void openFragmentInOverLay(Fragment fragment) throws IllegalStateException
-    {
-//        FragmentManager childFragmentManager = mainPagerAdapter.getItem(activeTab).getChildFragmentManager();
-//        FragmentTransaction fragmentTransaction = childFragmentManager.beginTransaction();
-//        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        fragmentTransaction.add(R.id.fragment_base_fragment_container, fragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commitAllowingStateLoss();
-//        mainTabBar.setVisibility(View.GONE);
-    }
-
-    public void openFragment(Fragment fragment) throws IllegalStateException
-    {
-//        FragmentManager childFragmentManager = mainPagerAdapter.getItem(activeTab).getChildFragmentManager();
-//        FragmentTransaction fragmentTransaction = childFragmentManager.beginTransaction();
-//        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
-//        fragmentTransaction.add(R.id.fragment_base_fragment_container, fragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commitAllowingStateLoss();
-//        mainTabBar.setVisibility(View.VISIBLE);
-
-    }
-
-    public void openFragmentNoTransition(Fragment fragment) throws IllegalStateException
-    {
-//        FragmentManager childFragmentManager = mainPagerAdapter.getItem(activeTab).getChildFragmentManager();
-//        FragmentTransaction fragmentTransaction = childFragmentManager.beginTransaction();
-//        fragmentTransaction.add(R.id.fragment_base_fragment_container, fragment);
-//        fragmentTransaction.addToBackStack(null);
-//        fragmentTransaction.commitAllowingStateLoss();
-//        mainTabBar.setVisibility(View.VISIBLE);
-
-    }
-
-    public void setOnBackPressedListener(BackButtonClickListener backButtonClickListener, Fragment fragment)
-    {
-//        this.backButtonClickListener = backButtonClickListener;
-//        this.fragment = mainPagerAdapter.getItem(activeTab);
-    }
-
-    public void setOnBackPressedListener(BackButtonClickListener backButtonClickListener)
-    {
-//        this.backButtonClickListener = backButtonClickListener;
-//        this.fragment = mainPagerAdapter.getItem(activeTab);
-    }
-
-//    @Override
-//    public void onBackPressed()
-//    {
-//        mainTabBar.setVisibility(View.VISIBLE);
-//        toolbarLayout.setVisibility(View.VISIBLE);
-//
-//        if (backButtonClickListener != null
-//                && fragment != null
-//                && mainPagerAdapter.getItem(activeTab).isAdded()
-//                && mainPagerAdapter.getItem(activeTab).getChildFragmentManager() != null
-//                && mainPagerAdapter.getItem(activeTab).getChildFragmentManager().getBackStackEntryCount() > 1)
-//        {
-//            backButtonClickListener.onBackButtonClicked(fragment);
-//        }
-//        else
-//        {
-//            super.onBackPressed();
-//        }
-//    }
 
 
     public byte[] getFileDataFromDrawable(Bitmap bitmap)
@@ -677,34 +603,48 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         toolbarLayout.setVisibility(View.GONE);
     }
 
-    public void hideActiveTab()
+    public void showLoading()
     {
-//        ((SmoothTransition) mainPagerAdapter.getItem(activeTab)).hide();
-//        switch (activeTab){
-//            case (TAB_EXPLORE_INDEX):{
-//
-//            }break;
-//            case (TAB_ADD_CLOTHES_INDEX):{
-//
-//            }break;
-//        }
+        if (loadingLayout != null)
+        {
+            loadingLayout.setVisibility(View.VISIBLE);
+            loadingSpinKit.setVisibility(View.VISIBLE);
+        }
     }
 
-    @Override
-    public void onBackPressed() {
-//        if(mainPagerAdapter.getActiveFragment.getBackStackEntryCount() == 0) {
+    public void hideLoading()
+    {
+        if (loadingLayout != null)
+        {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    // Stuff that updates the UI
+                    loadingLayout.setVisibility(View.GONE);
+                    loadingSpinKit.setVisibility(View.GONE);
+
+                }
+            });
+
+        }
+    }
+//
+//    @Override
+//    public void onBackPressed()
+//    {
+//        if (!exploreNavController.navigateUp()){
 //            super.onBackPressed();
 //        }
-//        else {
-//            getFragmentManager().popBackStack();
-//        }
-    }
+////        if(mainPagerAdapter.getActiveFragment.getBackStackEntryCount() == 0) {
+////            super.onBackPressed();
+////        }
+////        else {
+////            getFragmentManager().popBackStack();
+////        }
+//    }
 
-    @Override
-    protected void onStop()
-    {
-        super.onStop();
-    }
 }
 
 

@@ -1,31 +1,39 @@
 package com.sharonaapp.sharona.network;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SignUpRequest {
+import java.io.Serializable;
+
+public class SignUpRequest implements Serializable {
 
     @SerializedName("username")
-    String username;
+    @Expose
+    private String username;
     @SerializedName("first_name")
-    String first_name;
+    @Expose
+    private String firstName;
     @SerializedName("last_name")
-    String last_name;
+    @Expose
+    private String lastName;
     @SerializedName("email")
-    String email;
+    @Expose
+    private String email;
     @SerializedName("password")
-    String password;
-    @SerializedName("national_id")
-    String national_id;
-
-//    {
-//        "username":"shervin",
-//            "first_name":"shervin",
-//            "last_name":"shoorei",
-//            "email":"shervinox@google.com",
-//            "password":"12345678",
-//            "national_id":"0012546763"
-//    }
-
+    @Expose
+    private String password;
+    @SerializedName("city")
+    @Expose
+    private String city;
+    @SerializedName("address")
+    @Expose
+    private String address;
+    @SerializedName("gender")
+    @Expose
+    private String gender;
+    @SerializedName("phone_number")
+    @Expose
+    private String phoneNumber;
 
     public String getUsername()
     {
@@ -37,24 +45,24 @@ public class SignUpRequest {
         this.username = username;
     }
 
-    public String getFirst_name()
+    public String getFirstName()
     {
-        return first_name;
+        return firstName;
     }
 
-    public void setFirst_name(String first_name)
+    public void setFirstName(String firstName)
     {
-        this.first_name = first_name;
+        this.firstName = firstName;
     }
 
-    public String getLast_name()
+    public String getLastName()
     {
-        return last_name;
+        return lastName;
     }
 
-    public void setLast_name(String last_name)
+    public void setLastName(String lastName)
     {
-        this.last_name = last_name;
+        this.lastName = lastName;
     }
 
     public String getEmail()
@@ -77,13 +85,43 @@ public class SignUpRequest {
         this.password = password;
     }
 
-    public String getNational_id()
+    public String getCity()
     {
-        return national_id;
+        return city;
     }
 
-    public void setNational_id(String national_id)
+    public void setCity(String city)
     {
-        this.national_id = national_id;
+        this.city = city;
+    }
+
+    public String getAddress()
+    {
+        return address;
+    }
+
+    public void setAddress(String address)
+    {
+        this.address = address;
+    }
+
+    public String getGender()
+    {
+        return gender;
+    }
+
+    public void setGender(String gender)
+    {
+        this.gender = gender;
+    }
+
+    public String getPhoneNumber()
+    {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
     }
 }

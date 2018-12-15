@@ -1,5 +1,6 @@
 package com.sharonaapp.sharona.fragment;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,49 +9,50 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.sharonaapp.sharona.BackButtonClickListenerImpl;
 import com.sharonaapp.sharona.MyApplication;
 import com.sharonaapp.sharona.R;
 import com.sharonaapp.sharona.activity.MainActivity;
-import com.sharonaapp.sharona.model.LoginResponse;
+import com.sharonaapp.sharona.manager.LoginLogoutStateManager;
+import com.sharonaapp.sharona.model.request.OauthRequest;
+import com.sharonaapp.sharona.model.response.OauthResponse;
+import com.sharonaapp.sharona.network.Api;
+import com.sharonaapp.sharona.network.NetworkManager;
 import com.sharonaapp.sharona.network.SignUpRequest;
-import com.sharonaapp.sharona.network.Url;
+import com.sharonaapp.sharona.network.SignUpResponse;
+import com.sharonaapp.sharona.utility.CommonHelper;
 import com.sharonaapp.sharona.utility.DialogHelper;
 import com.sharonaapp.sharona.utility.ValidationHelper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.sharonaapp.sharona.manager.SharedPreferencesManager.EMAIL_PERSISTED;
 import static com.sharonaapp.sharona.manager.SharedPreferencesManager.USERNAME_PERSISTED;
-import static com.sharonaapp.sharona.network.NetworkManager.fetchErrorMessage;
-import static com.sharonaapp.sharona.network.Url.SIGNUP;
 
 public class SignUpFragment extends Fragment {
 
     private static final String TAG = "SignUpFragment";
 
     private Unbinder unbinder;
+
+    @BindView(R.id.sign_up_sign_up_layout)
+    LinearLayout signUpLayout;
 
     //username
     @BindView(R.id.sign_up_username_text_input_layout)
@@ -62,24 +64,60 @@ public class SignUpFragment extends Fragment {
     TextInputLayout emailTextInputLayout;
     @BindView(R.id.sign_up_email_edit_text)
     TextInputEditText emailTextInputEditText;
-    //    @BindView(R.id.sign_up_national_id_edit_text)
-//    TextInputEditText nationalIdEditText;
-    //password
+    // password
     @BindView(R.id.sign_up_password_text_input_layout)
     TextInputLayout passwordTextInputLayout;
     @BindView(R.id.sign_up_password_edit_text)
     TextInputEditText passwordTextInputEditText;
+    // city
+    @BindView(R.id.sign_up_city_text_input_layout)
+    TextInputLayout cityTextInputLayout;
+    @BindView(R.id.sign_up_city_edit_text)
+    TextInputEditText cityTextInputEditText;
+    // address
+    @BindView(R.id.sign_up_address_text_input_layout)
+    TextInputLayout addressTextInputLayout;
+    @BindView(R.id.sign_up_address_edit_text)
+    TextInputEditText addressTextInputEditText;
+    @BindView(R.id.sign_up_phone_number_edit_text)
+    TextInputEditText phoneNumberTextInputEditText;
+
+
+    @BindView(R.id.sign_up_gender_value_text_view)
+    TextView genderValueTextView;
     @BindView(R.id.sign_up_sign_up_button)
     Button signUpButton;
     @BindView(R.id.sign_up_login_text_view)
     TextView loginTextView;
+
+    @BindView(R.id.sign_up_logout_layout)
+    LinearLayout logoutLayout;
+
+
+    @OnClick({R.id.sign_up_gender_title_text_view, R.id.sign_up_gender_value_text_view})
+    void genderTextViewClicked()
+    {
+        CommonHelper.hideKeyboard(getActivity(), getView());
+
+        ArrayList<String> genderArrayList = MyApplication.getConfig().getUserGenderArrayList();
+        ArrayAdapter<String> genderSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, genderArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Gender")
+                .setAdapter(genderSpinnerAdapter, (dialog, which) -> {
+
+                    genderValueTextView.setText(genderArrayList.get(which));
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
 
     @OnClick(R.id.sign_up_sign_up_button)
     void signUp()
     {
         if (!ValidationHelper.isUserNameValid(usernameTextInputEditText))
         {
-            usernameTextInputLayout.setError("Username must be longer than 7 characters");
+            usernameTextInputLayout.setError("Username must be longer than 4 characters");
             return;
         }
 
@@ -89,86 +127,88 @@ public class SignUpFragment extends Fragment {
             return;
         }
 
-//        if (!ValidationHelper.isNationalIdValid(nationalIdEditText))
-//        {
-//            DialogHelper.showDialogWithMessage(getContext(), "National Id is not valid!");
-//            return;
-//        }
-
         if (!ValidationHelper.isPasswordValid(passwordTextInputEditText))
         {
-            passwordTextInputLayout.setError("Password is too short");
+            passwordTextInputLayout.setError("Password is too short or empty");
+            return;
+        }
+
+        if (!ValidationHelper.isCityValid(cityTextInputEditText))
+        {
+            cityTextInputLayout.setError("City is not valid");
+            return;
+        }
+
+        if (!ValidationHelper.isAddressValid(addressTextInputEditText))
+        {
+            addressTextInputLayout.setError("Address is not valid");
+            return;
+        }
+
+        if (!ValidationHelper.isPhoneNumberValid(phoneNumberTextInputEditText))
+        {
+            phoneNumberTextInputEditText.setError("Phone number is not valid");
+            return;
+        }
+
+        if (!ValidationHelper.isUserGenderValid(genderValueTextView))
+        {
+            DialogHelper.warnDialog(getActivity(), "Invalid input", "Select gender!");
             return;
         }
 
 
-        SignUpRequest signUpRequest = fillSignUpRequestWithUserInput();
-//        SignUpRequest signUpRequest = fillSignUpRequestWithMockData();
+        doSignUp();
 
-        DialogHelper.showLoading(getContext());
-
-        JSONObject paramsJson = new JSONObject();
-        try
-        {
-            paramsJson.put("username", signUpRequest.getUsername());
-//            paramsJson.put("first_name", signUpRequest.getFirst_name());
-//            paramsJson.put("last_name", signUpRequest.getLast_name());
-            paramsJson.put("email", signUpRequest.getEmail());
-            paramsJson.put("password", signUpRequest.getPassword());
-//            paramsJson.put("national_id", signUpRequest.getNational_id());
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
+    }
 
 
-        JsonObjectRequest signUpJsonRequest = new JsonObjectRequest(Request.Method.POST, SIGNUP, paramsJson,
-                response -> {
+    @OnClick(R.id.sign_up_logout_button)
+    void logout()
+    {
+        MyApplication.getSharedPreferencesManager().delete("token");
+        LoginLogoutStateManager.getInstance().setUserLoginLogoutState(Boolean.FALSE);
 
-                    DialogHelper.hideLoading();
+        signUpLayout.setVisibility(View.VISIBLE);
+        logoutLayout.setVisibility(View.GONE);
+    }
 
-                    try
-                    {
-                        if (response != null && response.has("success"))
-                        {
-                            if (response.getBoolean("success"))
-                            {
-                                onUserHasSignedUp(signUpRequest);
-                            }
-                            else
-                            {
-                                DialogHelper.showDialogWithMessage(getContext(), response.getString("userMessage"));
-                            }
-                        }
-                        else
-                        {
-                            DialogHelper.showDialogWithMessage(getContext(), "Sign up failed");
+    private void doSignUp()
+    {
 
-                        }
-                    }
-                    catch (JSONException e)
-                    {
-                        e.printStackTrace();
-                    }
+        SignUpRequest signUpRequest = new SignUpRequest();
+        signUpRequest.setUsername(usernameTextInputEditText.getText().toString());
+        signUpRequest.setEmail(emailTextInputEditText.getText().toString());
+        signUpRequest.setPassword(passwordTextInputEditText.getText().toString());
+        signUpRequest.setCity(cityTextInputEditText.getText().toString());
+        signUpRequest.setAddress(addressTextInputEditText.getText().toString());
+        signUpRequest.setGender(genderValueTextView.getText().toString().toUpperCase());
+        signUpRequest.setPhoneNumber(phoneNumberTextInputEditText.getText().toString());
 
-                }, error -> {
+        ((MainActivity) getActivity()).showLoading();
 
-            DialogHelper.hideLoading();
-
-            if (error != null)
+        Call<SignUpResponse> signUpCall = NetworkManager.getInstance().getEndpointApi(Api.class).signUp(signUpRequest);
+        signUpCall.enqueue(new Callback<SignUpResponse>() {
+            @Override
+            public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response)
             {
-                Log.d(TAG, "onErrorResponse: " + error);
-                String json = new String(error.networkResponse.data);
-                json = fetchErrorMessage(json, "user_message");
-                DialogHelper.showDialogWithMessage(getContext(), json);
+                ((MainActivity) getActivity()).hideLoading();
 
+                if (response.isSuccessful())
+                {
+                    onUserHasSignedUp(signUpRequest);
+                }
             }
 
-        });
+            @Override
+            public void onFailure(Call<SignUpResponse> call, Throwable t)
+            {
+                ((MainActivity) getActivity()).hideLoading();
+                Toast.makeText(getContext(), "Connection Error!", Toast.LENGTH_SHORT).show();
 
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(signUpJsonRequest);
+
+            }
+        });
 
 
     }
@@ -185,23 +225,11 @@ public class SignUpFragment extends Fragment {
         return signUpRequest;
     }
 
-    private SignUpRequest fillSignUpRequestWithMockData()
-    {
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setEmail("ali6@gmail.com");
-        signUpRequest.setUsername("Ali6");
-        signUpRequest.setFirst_name("Ali");
-        signUpRequest.setLast_name("Alizade");
-//        signUpRequest.setNational_id("5678901234");
-        signUpRequest.setPassword("12345678");
-        return signUpRequest;
-    }
-
     private void onUserHasSignedUp(SignUpRequest signUpRequest)
     {
-        //try to login the user and then go to explore fragment
+        // try to login the user and then go to explore fragment
         persist(signUpRequest);
-        login(signUpRequest.getPassword());
+        loginRetrofit(signUpRequest.getEmail(), signUpRequest.getPassword());
     }
 
     private void persist(SignUpRequest signUpRequest)
@@ -210,83 +238,63 @@ public class SignUpFragment extends Fragment {
         MyApplication.getSharedPreferencesManager().persist(EMAIL_PERSISTED, signUpRequest.getEmail());
     }
 
-    private void login(String password)
+    private void loginRetrofit(String username, String password)
     {
-        DialogHelper.showLoading(getContext());
-        JSONObject paramsJsonObject = new JSONObject();
-        try
         {
-            paramsJsonObject.put("username", MyApplication.getSharedPreferencesManager().read(EMAIL_PERSISTED));
-            paramsJsonObject.put("password", password);
-            paramsJsonObject.put("client_id", 1);
-            paramsJsonObject.put("client_secret", "zcWRDOGvr6jJKhdrc7I1R626mXSg0ORztaNZmpYJ");
-            paramsJsonObject.put("grant_type", "password");
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
 
+            OauthRequest oauthRequest = new OauthRequest();
+            oauthRequest.setClientId(3);
+            oauthRequest.setClientSecret("sNnoZW4JkaxJlT333HyLKZMV0rPkqZxtjXPInzRK");
+            oauthRequest.setGrantType("password");
+            oauthRequest.setUsername(username);
+            oauthRequest.setPassword(password);
+            ((MainActivity) getActivity()).showLoading();
+            Call<OauthResponse> oauthCall = NetworkManager.getInstance().getEndpointApi(Api.class).oauth(oauthRequest);
+            oauthCall.enqueue(new Callback<OauthResponse>() {
+                @Override
+                public void onResponse(Call<OauthResponse> call, Response<OauthResponse> response)
+                {
+                    ((MainActivity) getActivity()).hideLoading();
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Url.LOGIN, paramsJsonObject,
-                response -> {
-
-                    DialogHelper.hideLoading();
-
-                    if (response != null && response.has("access_token"))
+                    if (response.isSuccessful() && response.body() != null && response.body().getAccessToken() != null)
                     {
-                        LoginResponse loginResponse = new LoginResponse();
-                        try
+                        MyApplication.getSharedPreferencesManager().persist("token", response.body().getAccessToken());
+                        LoginLogoutStateManager.getInstance().setUserLoginLogoutState(Boolean.TRUE);
+
+                        signUpLayout.setVisibility(View.GONE);
+                        logoutLayout.setVisibility(View.VISIBLE);
+
+                        MyApplication.handleTokenForNotification(false);
+
+                        if (getActivity() != null)
                         {
-                            loginResponse.setAccessToken(response.getString("access_token"));
-                            MyApplication.getSharedPreferencesManager().persist("token", response.getString("access_token"));
                             ((MainActivity) getActivity()).routeExploreFragment();
-
-
                         }
-                        catch (JSONException e)
-                        {
-                            e.printStackTrace();
-                            onUserHasFailedToLogin();
-                        }
+                    }
+                    else if (response.code() == 400)
+                    {
+                        onUserHasFailedToLogin();
 
                     }
                     else
                     {
                         onUserHasFailedToLogin();
                     }
+                }
+
+                @Override
+                public void onFailure(Call<OauthResponse> call, Throwable t)
+                {
+                    ((MainActivity) getActivity()).hideLoading();
+
+                    onUserHasFailedToLogin();
+                }
+            });
 
 
-                }, error -> {
-            DialogHelper.hideLoading();
-
-
-            if (error != null)
-            {
-                String json = new String(error.networkResponse.data);
-                json = fetchErrorMessage(json, "user_message");
-                onUserHasFailedToLogin(json);
-            }
-            else
-            {
-                onUserHasFailedToLogin();
-            }
-
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                HashMap<String, String> headerHashMap = new HashMap<>();
-                headerHashMap.put("Content-Type", "application/json; charset=utf-8");
-                headerHashMap.put("Accept", "application/json");
-
-                return headerHashMap;
-            }
-        };
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        queue.add(jsonObjectRequest);
+        }
     }
+
 
     private void onUserHasFailedToLogin(String message)
     {
@@ -328,10 +336,15 @@ public class SignUpFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).setOnBackPressedListener(new BackButtonClickListenerImpl(getActivity()));
 
         initTextWatchers();
+        initGenderSpinner();
 
+
+    }
+
+    private void initGenderSpinner()
+    {
 
     }
 
@@ -398,16 +411,67 @@ public class SignUpFragment extends Fragment {
             }
         };
 
+        TextWatcher cityTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                cityTextInputLayout.setError(null);
+            }
+        };
+
+        TextWatcher addressTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                addressTextInputLayout.setError(null);
+            }
+        };
+
         usernameTextInputEditText.addTextChangedListener(usernameTextWatcher);
         emailTextInputEditText.addTextChangedListener(emailTextWatcher);
         passwordTextInputEditText.addTextChangedListener(passwordTextWatcher);
+        cityTextInputEditText.addTextChangedListener(cityTextWatcher);
+        addressTextInputEditText.addTextChangedListener(addressTextWatcher);
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        if (LoginLogoutStateManager.getInstance().isUserLogedIn())
+        {
+            signUpLayout.setVisibility(View.GONE);
+            logoutLayout.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            signUpLayout.setVisibility(View.VISIBLE);
+            logoutLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override

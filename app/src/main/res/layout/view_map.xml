@@ -5,15 +5,15 @@
     android:layout_height="match_parent"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto">
 
-    <!--<com.mapbox.mapboxsdk.maps.MapView-->
-        <!--android:id="@+id/mapView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--mapbox:mapbox_cameraTargetLat="35.749622"-->
-        <!--mapbox:mapbox_cameraTargetLng="51.3816002"-->
-        <!--mapbox:mapbox_cameraZoom="10"-->
-        <!--mapbox:mapbox_cameraZoomMax="12.41"-->
-        <!--mapbox:mapbox_cameraZoomMin="6"-->
-        <!--mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets" />-->
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/map_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mapbox:mapbox_cameraTargetLat="35.749622"
+        mapbox:mapbox_cameraTargetLng="51.3816002"
+        mapbox:mapbox_cameraZoom="10"
+        mapbox:mapbox_cameraZoomMax="12.41"
+        mapbox:mapbox_cameraZoomMin="6"
+        mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets"/>
 
 </android.support.constraint.ConstraintLayout>

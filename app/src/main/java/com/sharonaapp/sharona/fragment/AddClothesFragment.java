@@ -1,5 +1,6 @@
 package com.sharonaapp.sharona.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +15,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -27,11 +27,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -42,18 +42,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.sharonaapp.sharona.BackButtonClickListenerImpl;
 import com.sharonaapp.sharona.MyApplication;
 import com.sharonaapp.sharona.R;
 import com.sharonaapp.sharona.activity.MainActivity;
 import com.sharonaapp.sharona.helper.AddClothesHelper;
 import com.sharonaapp.sharona.model.WearingType;
-import com.sharonaapp.sharona.network.AddClothesRequest;
-import com.sharonaapp.sharona.network.AddClothesResponse;
 import com.sharonaapp.sharona.network.Api;
 import com.sharonaapp.sharona.network.NetworkManager;
+import com.sharonaapp.sharona.network.UploadClothesInfoPartRequest;
+import com.sharonaapp.sharona.network.UploadClothesInfoPartResponse;
 import com.sharonaapp.sharona.network.Url;
 import com.sharonaapp.sharona.network.VolleyMultipartRequest;
+import com.sharonaapp.sharona.utility.CommonHelper;
 import com.sharonaapp.sharona.utility.DialogHelper;
 import com.shuhart.stepview.StepView;
 
@@ -66,7 +66,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -80,11 +79,12 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 import static android.app.Activity.RESULT_OK;
 import static com.sharonaapp.sharona.manager.SharedPreferencesManager.CLOTHES_ID_WHICH_ITS_DETAIL_PART_HAS_BEEN_UPLOADED;
 import static com.sharonaapp.sharona.manager.SharedPreferencesManager.USER_HAS_HALF_WAY_UPLOADED_CLOTHES;
-import static com.sharonaapp.sharona.network.NetworkManager.getToken;
 
 
 public class AddClothesFragment extends Fragment {
@@ -93,36 +93,26 @@ public class AddClothesFragment extends Fragment {
 
     private Unbinder unbinder;
 
-    //type
-    @BindView(R.id.add_clothes_type_spinner)
-    Spinner typeSpinner;
-    @BindView(R.id.add_clothes_type_text_input_layout)
-    TextInputLayout typeTextInputLayout;
-    @BindView(R.id.add_clothes_type_text_input_edit_text)
-    AutoCompleteTextView typeTextInputEditText;
-    //size
-    @BindView(R.id.add_clothes_size_spinner)
-    Spinner sizeSpinner;
-    @BindView(R.id.add_clothes_size_text_input_layout)
-    TextInputLayout sizeTextInputLayout;
-    @BindView(R.id.add_clothes_size_text_input_edit_text)
-    AutoCompleteTextView sizeTextInputEditText;
-    //brand
-    @BindView(R.id.add_clothes_brand_spinner)
-    Spinner brandSpinner;
-    @BindView(R.id.add_clothes_brand_text_input_layout)
-    TextInputLayout brandTextInputLayout;
-    @BindView(R.id.add_clothes_brand_text_input_edit_text)
-    AutoCompleteTextView brandTextInputEditText;
-    //color
-    @BindView(R.id.add_clothes_color_spinner)
-    Spinner colorSpinner;
-    @BindView(R.id.add_clothes_color_text_input_layout)
-    TextInputLayout colorTextInputLayout;
-    @BindView(R.id.add_clothes_color_text_input_edit_text)
-    AutoCompleteTextView colorTextInputEditText;
+    // general details
+    @BindView(R.id.add_clothes_type_text_view)
+    TextView typeTextView;
+    @BindView(R.id.add_clothes_size_text_view)
+    TextView sizeTextView;
+    @BindView(R.id.add_clothes_brand_text_view)
+    TextView brandTextView;
+    @BindView(R.id.add_clothes_color_text_view)
+    TextView colorTextView;
+    @BindView(R.id.add_clothes_gender_text_view)
+    TextView genderTextView;
+    @BindView(R.id.add_clothes_used_status_text_view)
+    TextView usedStatusTextView;
 
     //buy price
+    @BindView(R.id.add_clothes_sellable_checkbox)
+    AppCompatCheckBox sellableCheckbox;
+    @BindView(R.id.add_clothes_lendable_checkbox)
+    AppCompatCheckBox lendableCheckbox;
+
     @BindView(R.id.add_clothes_buy_price_text_input_layout)
     TextInputLayout buyPriceTextInputLayout;
     @BindView(R.id.add_clothes_buy_price_text_input_edit_text)
@@ -136,22 +126,17 @@ public class AddClothesFragment extends Fragment {
     //swap
     @BindView(R.id.add_clothes_swapable_checkbox)
     AppCompatCheckBox swapableCheckbox;
-    @BindView(R.id.add_clothes_swap_condition_type_text_input_layout)
-    TextInputLayout swapConditionDesiredTypeInputLayout;
-    @BindView(R.id.add_clothes_swap_condition_type_text_input_edit_text)
-    TextInputEditText swapConditionDesiredTypeEditText;
-    @BindView(R.id.add_clothes_swap_condition_size_text_input_layout)
-    TextInputLayout swapConditionDesiredSizeInputLayout;
-    @BindView(R.id.add_clothes_swap_condition_size_text_input_edit_text)
-    TextInputEditText swapConditionDesiredSizeEditText;
-    @BindView(R.id.add_clothes_swap_condition_color_text_input_layout)
-    TextInputLayout swapConditionDesiredColorInputLayout;
-    @BindView(R.id.add_clothes_swap_condition_color_text_input_edit_text)
-    TextInputEditText swapConditionDesiredColorEditText;
-    @BindView(R.id.add_clothes_swap_condition_brand_text_input_layout)
-    TextInputLayout swapConditionDesiredBrandInputLayout;
-    @BindView(R.id.add_clothes_swap_condition_brand_text_input_edit_text)
-    TextInputEditText swapConditionDesiredBrandEditText;
+
+    // swap details
+    @BindView(R.id.add_clothes_swap_condition_type_text_view)
+    TextView swapConditionTypeTextView;
+    @BindView(R.id.add_clothes_swap_condition_size_text_view)
+    TextView swapConditionSizeTextView;
+    @BindView(R.id.add_clothes_swap_condition_brand_text_view)
+    TextView swapConditionBrandTextView;
+    @BindView(R.id.add_clothes_swap_condition_color_text_view)
+    TextView swapConditionColorTextView;
+
 
     //description
     @BindView(R.id.add_clothes_description_text_input_layout)
@@ -165,48 +150,295 @@ public class AddClothesFragment extends Fragment {
     ImageView selectedPhoto1imageView;
     @BindView(R.id.add_clothes_select_photo_2_image_view)
     ImageView selectedPhoto2imageView;
-    @BindView(R.id.add_clothes_submit_button)
-    Button submit_button;
+    @BindView(R.id.add_clothes_select_photo_3_image_view)
+    ImageView selectedPhoto3imageView;
 
-    @BindView(R.id.add_clothes_details_layout)
-    ConstraintLayout detailsLayout;
-    @BindView(R.id.add_clothes_image_upload_layout)
-    ConstraintLayout imageUploadLayout;
+    @BindView(R.id.add_clothes_proceed_button)
+    Button proceed_button;
+
+    //    @BindView(R.id.add_clothes_general_details_layout)
+//    ConstraintLayout generalDetailsScrollView;
+    @BindView(R.id.add_clothes_general_details_scroll_view)
+    ScrollView generalDetailsScrollView;
+    //    @BindView(R.id.add_clothes_pricing_details_layout)
+//    ConstraintLayout pricingDetailsScrollView;
+    @BindView(R.id.add_clothes_pricing_details_scroll_view)
+    ScrollView pricingDetailsScrollView;
+    //    @BindView(R.id.add_clothes_swap_details_layout)
+//    ConstraintLayout swapDetailsScrollView;
+    @BindView(R.id.add_clothes_swap_details_scroll_view)
+    ScrollView swapDetailsScrollView;
+    @BindView(R.id.add_clothes_image_upload_scroll_view)
+    ScrollView imageUploadScrollView;
 
     ArrayList<Bitmap> selectedPhotosAsBitmap;
-    private byte[] multipartBody;
-    private String latestImageViewClickedForUploading;
+    private static String latestImageViewClickedForUploading;
 
-    @BindView(R.id.add_clothes_sellable_checkbox)
-    AppCompatCheckBox sellableCheckbox;
-    @BindView(R.id.add_clothes_lendable_checkbox)
-    AppCompatCheckBox lendableCheckbox;
 
     @BindView(R.id.step_view)
     StepView stepView;
     private int enteredTypeWearingType = -1;
 
+    // general details: Type
+    @OnClick(R.id.add_clothes_type_text_view)
+    void typeTextViewClicked()
+    {
+        ArrayList<String> typeArrayList = MyApplication.getConfig().getWearingTypesNamesArrayList();
+        ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, typeArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Type")
+                .setAdapter(typeSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesType = typeArrayList.get(which);
+                    if (typeTextView.getText() != null && !typeTextView.getText().toString().equalsIgnoreCase(typeArrayList.get(which)))
+                    {
+                        typeTextView.setText(typeArrayList.get(which));
+                        AddClothesHelper.AddClothesDTO.toBeUploadedClothesSize = null;
+                        sizeTextView.setText("Select Size");
+                    }
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
+    // general details: Size
+    @OnClick(R.id.add_clothes_size_text_view)
+    void sizeTextViewClicked()
+    {
+        if (AddClothesHelper.AddClothesDTO.toBeUploadedClothesType == null ||
+                AddClothesHelper.AddClothesDTO.toBeUploadedClothesType.length() == 0)
+        {
+            DialogHelper.warnDialog(getActivity(), "Type is not selected", "First select type!");
+            return;
+        }
+
+        ArrayList<String> sizeArrayList;
+
+        if (AddClothesHelper.AddClothesDTO.toBeUploadedClothesType != null &&
+                AddClothesHelper.AddClothesDTO.toBeUploadedClothesType.length() > 0 &&
+                AddClothesHelper.AddClothesDTO.toBeUploadedClothesType.equalsIgnoreCase("Shoes"))
+        {
+            sizeArrayList = MyApplication.getConfig().getFootwearSizeArrayList();
+
+        }
+        else
+        {
+            sizeArrayList = MyApplication.getConfig().getClothesSizeArrayList();
+        }
+
+        ArrayAdapter<String> sizeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, sizeArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Size")
+                .setAdapter(sizeSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesSize = sizeArrayList.get(which);
+                    sizeTextView.setText(sizeArrayList.get(which));
+
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
+    // general details: Brand
+    @OnClick(R.id.add_clothes_brand_text_view)
+    void brandTextViewClicked()
+    {
+        ArrayList<String> brandArrayList = MyApplication.getConfig().getClothesBrandsArrayList();
+        ArrayAdapter<String> brandSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, brandArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Brand")
+                .setAdapter(brandSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesBrand = brandArrayList.get(which);
+                    brandTextView.setText(brandArrayList.get(which));
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
+    // general details: Color
+    @OnClick(R.id.add_clothes_color_text_view)
+    void colorTextViewClicked()
+    {
+        ArrayList<String> colorArrayList = MyApplication.getConfig().getColorArrayList();
+        ArrayAdapter<String> colorSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, colorArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Color")
+                .setAdapter(colorSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesColor = colorArrayList.get(which);
+                    colorTextView.setText(colorArrayList.get(which));
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
+    // general details: gender
+    @OnClick(R.id.add_clothes_gender_text_view)
+    void genderTextViewClicked()
+    {
+        ArrayList<String> genderArrayList = MyApplication.getConfig().getClothesGenderArrayList();
+        ArrayAdapter<String> genderSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, genderArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Gender")
+                .setAdapter(genderSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesGender = genderArrayList.get(which);
+                    genderTextView.setText(genderArrayList.get(which));
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
+    // general details: used status
+    @OnClick(R.id.add_clothes_used_status_text_view)
+    void usedStatusTextViewClicked()
+    {
+        ArrayList<String> usedStatusArrayList = MyApplication.getConfig().getUsedStatusArrayList();
+        ArrayAdapter<String> usedStatusSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, usedStatusArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Usage Status")
+                .setAdapter(usedStatusSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesUsedStatus = usedStatusArrayList.get(which);
+                    usedStatusTextView.setText(usedStatusArrayList.get(which));
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
+    // Swap details: Type
+    @OnClick(R.id.add_clothes_swap_condition_type_text_view)
+    void swapConditionTypeTextViewClicked()
+    {
+        ArrayList<String> typeArrayList = MyApplication.getConfig().getWearingTypesNamesArrayList();
+        ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, typeArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Type")
+                .setAdapter(typeSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionType = typeArrayList.get(which);
+                    if (swapConditionTypeTextView.getText() != null && !swapConditionTypeTextView.getText().toString().equalsIgnoreCase(typeArrayList.get(which)))
+                    {
+                        swapConditionTypeTextView.setText(typeArrayList.get(which));
+                        AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionSize = null;
+                        swapConditionSizeTextView.setText("Select Size Condition");
+                    }
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
+    // Swap details: Size
+    @OnClick(R.id.add_clothes_swap_condition_size_text_view)
+    void swapConditionSizeTextViewClicked()
+    {
+        if (AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionType == null ||
+                AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionType.length() == 0)
+        {
+            DialogHelper.warnDialog(getActivity(), "Type is not selected", "First select type!");
+            return;
+        }
+
+        ArrayList<String> sizeArrayList;
+
+        if (AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionType != null &&
+                AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionType.length() > 0 &&
+                AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionType.equalsIgnoreCase("Shoes"))
+        {
+            sizeArrayList = MyApplication.getConfig().getFootwearSizeArrayList();
+
+        }
+        else
+        {
+            sizeArrayList = MyApplication.getConfig().getClothesSizeArrayList();
+        }
+
+        ArrayAdapter<String> sizeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, sizeArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Size")
+                .setAdapter(sizeSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionSize = sizeArrayList.get(which);
+                    swapConditionSizeTextView.setText(sizeArrayList.get(which));
+
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
+    // Swap details: Brand
+    @OnClick(R.id.add_clothes_swap_condition_brand_text_view)
+    void swapConditionbrandTextViewClicked()
+    {
+        ArrayList<String> brandArrayList = MyApplication.getConfig().getClothesBrandsArrayList();
+        ArrayAdapter<String> brandSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, brandArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Brand")
+                .setAdapter(brandSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionBrand = brandArrayList.get(which);
+                    swapConditionBrandTextView.setText(brandArrayList.get(which));
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
+    // Swap details: Color
+    @OnClick(R.id.add_clothes_swap_condition_color_text_view)
+    void swapConditionColorTextViewClicked()
+    {
+        ArrayList<String> colorArrayList = MyApplication.getConfig().getColorArrayList();
+        ArrayAdapter<String> colorSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, colorArrayList);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Select Color")
+                .setAdapter(colorSpinnerAdapter, (dialog, which) -> {
+
+                    AddClothesHelper.AddClothesDTO.toBeUploadedClothesSwapConditionColor = colorArrayList.get(which);
+                    swapConditionColorTextView.setText(colorArrayList.get(which));
+
+                    dialog.dismiss();
+                }).setCancelable(true).create().show();
+    }
+
 
     @OnCheckedChanged(R.id.add_clothes_sellable_checkbox)
     void _setSellableCheckbox(CompoundButton checkbox, boolean value)
     {
-        sellableCheckboxChanged(value);
+        if (!value && !lendableCheckbox.isChecked())
+        {
+            DialogHelper.warnDialog(getActivity(), "Invalid Selection", "At least one exchange method must be selected");
+            sellableCheckbox.setChecked(true);
+            return;
+        }
+        buyPriceTextInputLayout.setEnabled(value);
+        AddClothesHelper.AddClothesDTO.clothesIsSellable = value;
+
     }
 
-    private void sellableCheckboxChanged(boolean value)
-    {
-        buyPriceTextInputLayout.setEnabled(value);
-    }
 
     @OnCheckedChanged(R.id.add_clothes_lendable_checkbox)
     void _setLendableCheckbox(CompoundButton checkbox, boolean value)
     {
-        lendableCheckboxChanged(value);
-    }
-
-    private void lendableCheckboxChanged(boolean value)
-    {
+        if (!value && !sellableCheckbox.isChecked())
+        {
+            DialogHelper.warnDialog(getActivity(), "Invalid Selection", "At least one exchange method must be selected");
+            lendableCheckbox.setChecked(true);
+            return;
+        }
         rentPriceTextInputLayout.setEnabled(value);
+        AddClothesHelper.AddClothesDTO.clothesIsRentable = value;
+
     }
 
     @OnCheckedChanged(R.id.add_clothes_swapable_checkbox)
@@ -217,21 +449,13 @@ public class AddClothesFragment extends Fragment {
 
     private void swapableCheckboxChanged(boolean value)
     {
-        swapConditionDesiredTypeInputLayout.setEnabled(value);
-        swapConditionDesiredSizeInputLayout.setEnabled(value);
-        swapConditionDesiredColorInputLayout.setEnabled(value);
-        swapConditionDesiredBrandInputLayout.setEnabled(value);
-        if (value)
-        {
-        }
-        else
-        {
-        }
+        AddClothesHelper.AddClothesDTO.clothesIsSwapable = value;
     }
 
     @OnClick({R.id.add_clothes_select_photo_0_image_view,
             R.id.add_clothes_select_photo_1_image_view,
-            R.id.add_clothes_select_photo_2_image_view})
+            R.id.add_clothes_select_photo_2_image_view,
+            R.id.add_clothes_select_photo_3_image_view,})
     void selectPhoto(View view)
     {
         displayChooseGalleryOrCameraDialog(view);
@@ -251,74 +475,18 @@ public class AddClothesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).setOnBackPressedListener(new BackButtonClickListenerImpl(getActivity()), this);
 
         initSellableAndRentableCheckBoxes();
-        initAutoTextViewAdapters(view);
-        initTextWatchers();
-        initSpinners();
 
-        stepView.getState().stepsNumber(5).commit();
+        stepView.getState().stepsNumber(4).commit();
 
+        initPricingTextWatchers();
 
     }
 
-    private void initSpinners()
+    private void initPricingTextWatchers()
     {
-        // type
-        List<String> wearingTypesNamesArrayList = MyApplication.getConfig().getWearingTypesNamesArrayList();
-        ArrayAdapter<String> typeSpinnerAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, wearingTypesNamesArrayList);
-        typeSpinner.setPrompt("Type");
-        typeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinner.setAdapter(typeSpinnerAdapter);
-
-        // size
-        ArrayList<String> clothesSizeArrayList = MyApplication.getConfig().getClothesSizeArrayList();
-        ArrayAdapter<String> sizeSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, clothesSizeArrayList);
-        sizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        sizeSpinner.setPrompt("Size");
-        sizeSpinner.setAdapter(sizeSpinnerAdapter);
-
-        // brand
-        ArrayList<String> clothesBrandsArrayList = MyApplication.getConfig().getClothesBrandsArrayList();
-        ArrayAdapter<String> brandSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, clothesBrandsArrayList);
-        brandSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        brandSpinner.setPrompt("Brand");
-        brandSpinner.setAdapter(brandSpinnerAdapter);
-
-        // color
-        ArrayList<String> colorArrayList = MyApplication.getConfig().getColorArrayList();
-        ArrayAdapter<String> colorSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, colorArrayList);
-        colorSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        colorSpinner.setPrompt("Color");
-        colorSpinner.setAdapter(colorSpinnerAdapter);
-
-    }
-
-    private void initAutoTextViewAdapters(@NonNull View view)
-    {
-        if (MyApplication.getConfig() == null)
-        {
-            return;
-        }
-
-        ArrayList<String> clothesTypesArrayList = MyApplication.getConfig().getWearingTypesNamesArrayList();
-        ArrayList<String> clothesBrandsArrayList = MyApplication.getConfig().getClothesBrandsArrayList();
-        ArrayList<String> clothesSizeArrayList = MyApplication.getConfig().getClothesSizeArrayList();
-
-        ArrayAdapter<String> typesSuggestionAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, clothesTypesArrayList);
-        ArrayAdapter<String> brandsSuggestionAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, clothesBrandsArrayList);
-        ArrayAdapter<String> sizesSuggestionAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, clothesSizeArrayList);
-
-        typeTextInputEditText.setAdapter(typesSuggestionAdapter);
-        brandTextInputEditText.setAdapter(brandsSuggestionAdapter);
-        sizeTextInputEditText.setAdapter(sizesSuggestionAdapter);
-    }
-
-    private void initTextWatchers()
-    {
-        typeTextInputEditText.addTextChangedListener(new TextWatcher() {
+        buyPriceTextInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
@@ -334,19 +502,14 @@ public class AddClothesFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable)
             {
-                if (enteredTypeIsValid(editable))
+                if (editable != null)
                 {
-                    selectedTypeFlagInitializer(editable);
-                    activate(sizeTextInputEditText);
-                }
-                else
-                {
-                    disable(sizeTextInputEditText);
+                    AddClothesHelper.AddClothesDTO.buyPrice = editable.toString();
                 }
             }
         });
 
-        sizeTextInputEditText.addTextChangedListener(new TextWatcher() {
+        rentPriceTextInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
@@ -362,37 +525,14 @@ public class AddClothesFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable)
             {
-                if (enteredSizeIsValid(editable))
+                if (editable != null)
                 {
-                    activate(brandTextInputEditText);
+                    AddClothesHelper.AddClothesDTO.rentPrice = editable.toString();
                 }
-                else
-                {
-                    disable(brandTextInputEditText);
-                }
-            }
-        });
-
-        brandTextInputEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable)
-            {
-
             }
         });
     }
+
 
     private void selectedTypeFlagInitializer(Editable editable)
     {
@@ -437,30 +577,6 @@ public class AddClothesFragment extends Fragment {
         return false;
     }
 
-    private void disable(AutoCompleteTextView textInputEditText)
-    {
-        textInputEditText.setText("");
-        textInputEditText.setEnabled(false);
-
-    }
-
-    private void activate(AutoCompleteTextView textInputEditText)
-    {
-        textInputEditText.setEnabled(true);
-    }
-
-    private boolean enteredTypeIsValid(Editable editable)
-    {
-//        if (editable != null && MyApplication.getConfig().getWearingTypesArrayList().contains(editable.toString()))
-        {
-            return true;
-        }
-//        else
-//        {
-//            return false;
-//        }
-
-    }
 
     private void initSellableAndRentableCheckBoxes()
     {
@@ -484,6 +600,7 @@ public class AddClothesFragment extends Fragment {
     private void displayChooseGalleryOrCameraDialog(View view)
     {
         selectLatestImageViewClickedForUploading(view);
+
         String choiceString[] = new String[]{"Gallery", "Camera"};
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setIcon(R.mipmap.ic_launcher);
@@ -500,8 +617,6 @@ public class AddClothesFragment extends Fragment {
                     else
                     {
                         intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                            File f = new File(android.os.Environment.getExternalStorageDirectory(), "imagename.jpg");
-//                            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                     }
                     startActivityForResult(
                             Intent.createChooser(intent, "Select profile picture"), 1001);
@@ -528,7 +643,6 @@ public class AddClothesFragment extends Fragment {
             {
                 // from gallery
 
-
                 Uri imageUri = data.getData();
                 try
                 {
@@ -536,8 +650,8 @@ public class AddClothesFragment extends Fragment {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
 
                     //displaying selected image to imageview
-//                    setImageToLatestImageViewSelected(bitmap);
-                    selectedPhoto0imageView.setImageBitmap(bitmap);
+                    setImageToLatestImageViewSelected(bitmap);
+//                    selectedPhoto0imageView.setImageBitmap(bitmap);
 
                     //calling the method uploadBitmap to upload image
 //                uploadBitmap(bitmap);
@@ -559,7 +673,11 @@ public class AddClothesFragment extends Fragment {
                     fos.close();
 
 //                    uploadFile(f);
+
+                    //okhttp works only
                     uploadokhttp(f);
+//                    uploadRetrofit(f);
+
 //                uploadShit(f);
 //                    uploadShitByPut(f);
 //                uploafFateme(f);
@@ -575,7 +693,6 @@ public class AddClothesFragment extends Fragment {
             else
             {
                 // from camera
-
 
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 
@@ -596,10 +713,21 @@ public class AddClothesFragment extends Fragment {
 
                 if (bitmap == null)
                 {
-                    // for safety reasons you can
-                    // use thumbnail if not retrieved full sized image
+                    // for safety reasons
                     bitmap = (Bitmap) data.getExtras().get("data");
                 }
+
+                setImageToLatestImageViewSelected(bitmap);
+
+                try
+                {
+                    uploadokhttp(bitmapToFile(bitmap));
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+
 
 //                try
 //                {
@@ -634,6 +762,12 @@ public class AddClothesFragment extends Fragment {
             case ("2"):
             {
                 selectedPhoto2imageView.setImageBitmap(bitmap);
+
+            }
+            break;
+            case ("3"):
+            {
+                selectedPhoto3imageView.setImageBitmap(bitmap);
 
             }
             break;
@@ -674,60 +808,237 @@ public class AddClothesFragment extends Fragment {
 
     }
 
-    @OnClick(R.id.add_clothes_submit_button)
-    public void submit()
+    @OnClick(R.id.add_clothes_proceed_button)
+    public void proceedButtonClicked()
     {
 
-        if (detailPartIsValid())
+        // 0 -> General details
+        // 1 -> Pricing details
+        // 2 -> Swap details
+        // 3 -> Image uploading
+
+        switch (AddClothesHelper.AddClothesDTO.currentState)
         {
-            if (!userHasHalfWayUploadedClothes())
+            case (0):
             {
-                AddClothesRequest clothes = collectUserInputAsClothesToBeUploaded();
-                addClothesDetailPart(clothes);
+
+                if (AddClothesHelper.generalDetailsValidation(getActivity()))
+                {
+
+                    goToLayout(1);
+                    AddClothesHelper.AddClothesDTO.currentState = 1;
+                }
+
+
+                break;
             }
-            else
+
+            case (1):
             {
-//              addClothesImagePart();
-//              uploadImage(selectedPhoto0imageView.)
+
+                if (AddClothesHelper.pricingDetailsValidation(getActivity()))
+                {
+                    CommonHelper.hideKeyboard(getActivity(), getView());
+
+                    AddClothesHelper.saveDescription(descriptionTextInputEditText);
+                    goToLayout(2);
+                    AddClothesHelper.AddClothesDTO.currentState = 2;
+                }
+
+                break;
+            }
+            case (2):
+            {
+                if (AddClothesHelper.swapDetailsValidation(getActivity()))
+                {
+
+                    uploadClothesInfoPart(AddClothesHelper.AddClothesDTO.getUploadClothesInfoPartRequest());
+
+                    goToLayout(3);
+                    AddClothesHelper.AddClothesDTO.currentState = 3;
+                }
+
+                break;
+            }
+            case (3):
+            {
+                if (AddClothesHelper.imageUploadValidation(getActivity()))
+                {
+                    Toast.makeText(getActivity(), "Successfully created!\n Add another?", Toast.LENGTH_LONG).show();
+                    goToLayout(0);
+                    AddClothesHelper.reset();
+                    resetEverything();
+                }
             }
         }
 
+//                   if (detailPartIsValid())
+//            {
+//                if (!userHasHalfWayUploadedClothes())
+//                {
+//                    UploadClothesInfoPartRequest clothes = collectUserInputAsClothesToBeUploaded();
+//                    addClothesDetailPart(clothes);
+//                }
+//                else
+//                {
+////              imagePartOfUploadClothes();
+////              uploadImage(selectedPhoto0imageView.)
 
+
+    }
+
+    private void resetEverything()
+    {
+        typeTextView.setText("Select Type");
+        sizeTextView.setText("Select Size");
+        brandTextView.setText("Select Brand");
+        colorTextView.setText("Select Color");
+        genderTextView.setText("Select Gender");
+        usedStatusTextView.setText("Select Status");
+
+        buyPriceTextInputEditText.setText("");
+        rentPriceTextInputEditText.setText("");
+
+    }
+
+    private void uploadClothesInfoPart(UploadClothesInfoPartRequest uploadClothesInfoPartRequest)
+    {
+        Call<UploadClothesInfoPartResponse> uploadClothesCall = NetworkManager.getInstance().getEndpointApi(Api.class).uploadClothes(uploadClothesInfoPartRequest);
+        uploadClothesCall.enqueue(new Callback<UploadClothesInfoPartResponse>() {
+            @Override
+            public void onResponse(Call<UploadClothesInfoPartResponse> call, retrofit2.Response<UploadClothesInfoPartResponse> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    userHasUploadedClothesInfoPart(response.body());
+                }
+                else
+                {
+                    onUserHasFailedToAddClothesDetailPart(response);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<UploadClothesInfoPartResponse> call, Throwable t)
+            {
+                Log.d(TAG, "onFailure: uploadClothesInfoPart");
+                onUserHasFailedToAddClothesDetailPart(t);
+
+
+            }
+        });
+    }
+
+    private void userHasUploadedClothesInfoPart(UploadClothesInfoPartResponse uploadClothesInfoPartResponse)
+    {
+
+        MyApplication.getSharedPreferencesManager().persist(CLOTHES_ID_WHICH_ITS_DETAIL_PART_HAS_BEEN_UPLOADED, uploadClothesInfoPartResponse.getData().getId());
+        MyApplication.getSharedPreferencesManager().persist(USER_HAS_HALF_WAY_UPLOADED_CLOTHES, true);
+    }
+
+    private void onUserHasFailedToAddClothesDetailPart(Throwable response)
+    {
+        onUserHasFailedToUploadClothesDetailPart();
+    }
+
+    private void onUserHasFailedToAddClothesDetailPart(retrofit2.Response<UploadClothesInfoPartResponse> t)
+    {
+        onUserHasFailedToUploadClothesDetailPart();
+
+    }
+
+    private void onUserHasFailedToUploadClothesDetailPart()
+    {
+        if (getView() != null && getView().getContext() != null)
+        {
+            DialogHelper.warnDialog(getView().getContext(), "Connection failed", "Pleas try again");
+            goToLayout(2);
+            AddClothesHelper.AddClothesDTO.currentState = 2;
+        }
+    }
+
+    private void goToLayout(int index)
+    {
+        switch (index)
+        {
+            case 0:
+            {
+                stepView.go(0, true);
+
+                generalDetailsScrollView.setVisibility(View.VISIBLE);
+                pricingDetailsScrollView.setVisibility(View.GONE);
+                swapDetailsScrollView.setVisibility(View.GONE);
+                imageUploadScrollView.setVisibility(View.GONE);
+                break;
+            }
+            case 1:
+            {
+                stepView.go(1, true);
+
+                pricingDetailsScrollView.setVisibility(View.VISIBLE);
+                generalDetailsScrollView.setVisibility(View.GONE);
+                swapDetailsScrollView.setVisibility(View.GONE);
+                imageUploadScrollView.setVisibility(View.GONE);
+                break;
+            }
+            case 2:
+            {
+                stepView.go(2, true);
+
+                swapDetailsScrollView.setVisibility(View.VISIBLE);
+                generalDetailsScrollView.setVisibility(View.GONE);
+                pricingDetailsScrollView.setVisibility(View.GONE);
+                imageUploadScrollView.setVisibility(View.GONE);
+                break;
+            }
+
+            case 3:
+            {
+                stepView.go(3, true);
+
+                imageUploadScrollView.setVisibility(View.VISIBLE);
+                generalDetailsScrollView.setVisibility(View.GONE);
+                pricingDetailsScrollView.setVisibility(View.GONE);
+                swapDetailsScrollView.setVisibility(View.GONE);
+                break;
+            }
+        }
     }
 
     private boolean detailPartIsValid()
     {
-        if (!AddClothesHelper.isClothesTypeValid(typeTextInputEditText.getText()))
-        {
-            return false;
-        }
-        if (!AddClothesHelper.isClothesSizeValid(sizeTextInputEditText.getText()))
-        {
-            return false;
-        }
-        if (!AddClothesHelper.isClothesBrandValid(typeTextInputEditText.getText()))
-        {
-            return false;
-        }
-        if (!AddClothesHelper.isClothesColorValid(swapConditionDesiredColorEditText.getText()))
-        {
-            return false;
-        }
-
-        if (!AddClothesHelper.isClothesPriceValid(buyPriceTextInputEditText, rentPriceTextInputEditText))
-        {
-            return false;
-        }
+//        if (!AddClothesHelper.isClothesTypeValid(typeTextInputEditText.getText()))
+//        {
+//            return false;
+//        }
+//        if (!AddClothesHelper.isClothesSizeValid(sizeTextInputEditText.getText()))
+//        {
+//            return false;
+//        }
+//        if (!AddClothesHelper.isClothesBrandValid(typeTextInputEditText.getText()))
+//        {
+//            return false;
+//        }
+//        if (!AddClothesHelper.isClothesColorValid(swapConditionDesiredColorEditText.getText()))
+//        {
+//            return false;
+//        }
+//
+//        if (!AddClothesHelper.isClothesPriceValid(buyPriceTextInputEditText, rentPriceTextInputEditText))
+//        {
+//            return false;
+//        }
 
         return true;
     }
 
-    private AddClothesRequest collectUserInputAsClothesToBeUploaded()
+    private UploadClothesInfoPartRequest collectUserInputAsClothesToBeUploaded()
     {
-        AddClothesRequest addClothesRequest = new AddClothesRequest();
-//        addClothesRequest.setType();
+        UploadClothesInfoPartRequest uploadClothesInfoPartRequest = new UploadClothesInfoPartRequest();
+//        uploadClothesInfoPartRequest.setType();
 
-        return addClothesRequest;
+        return uploadClothesInfoPartRequest;
 
     }
 
@@ -741,16 +1052,16 @@ public class AddClothesFragment extends Fragment {
 //        RequestBody methodType = RequestBody.create(MediaType.parse("text/plain"), "put");
 //
 //
-//        Call<AddClothesResponse> addClothesResponseCall = endpointApi.addClothesImagePart(methodType, part, 5);
-//        addClothesResponseCall.enqueue(new Callback<AddClothesResponse>() {
+//        Call<UploadClothesInfoPartResponse> addClothesResponseCall = endpointApi.imagePartOfUploadClothes(methodType, part, 5);
+//        addClothesResponseCall.enqueue(new Callback<UploadClothesInfoPartResponse>() {
 //            @Override
-//            public void onResponse(Call<AddClothesResponse> call, Response<AddClothesResponse> response)
+//            public void onResponse(Call<UploadClothesInfoPartResponse> call, Response<UploadClothesInfoPartResponse> response)
 //            {
 //                Log.d(TAG, "onResponse: " + response.body());
 //            }
 //
 //            @Override
-//            public void onFailure(Call<AddClothesResponse> call, Throwable t)
+//            public void onFailure(Call<UploadClothesInfoPartResponse> call, Throwable t)
 //            {
 //                Log.d(TAG, "onFailure: " + t.getMessage());
 //
@@ -822,90 +1133,6 @@ public class AddClothesFragment extends Fragment {
 
     }
 
-    void addClothesDetailPartWithReftrofit()
-    {
-        DialogHelper.showLoading(getContext());
-
-//        Call<AddClothesResponse> addClothesCall = NetworkManager.getInstance().getEndpointApi(Api.class).addClothes();
-
-    }
-
-
-    private void addClothesDetailPart(AddClothesRequest addClothesRequest)
-    {
-
-        DialogHelper.showLoading(getContext());
-
-        JSONObject paramsJsonObject = new JSONObject();
-
-        try
-        {
-            paramsJsonObject.put("title", addClothesRequest.getTitle());
-            paramsJsonObject.put("brand", addClothesRequest.getBrand());
-            paramsJsonObject.put("type", addClothesRequest.getType());
-            paramsJsonObject.put("size", addClothesRequest.getSize());
-            paramsJsonObject.put("color", addClothesRequest.getColor());
-            paramsJsonObject.put("buy_price", addClothesRequest.getBuyPrice());
-            paramsJsonObject.put("rent_price", addClothesRequest.getRentPrice());
-            paramsJsonObject.put("description", addClothesRequest.getDescription());
-            paramsJsonObject.put("sellable", addClothesRequest.isSellable());
-            paramsJsonObject.put("lendable", addClothesRequest.isLendable());
-        }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
-        }
-
-
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Url.ADD_CLOTHES, paramsJsonObject,
-                response -> {
-                    Log.d(TAG, "addClothesDetailPart: " + response);
-                    DialogHelper.hideLoading();
-                    try
-                    {
-                        if (response.has("success") && response.getBoolean("success"))
-                        {
-                            onUserHasAddedClothesDetailPart(response.getJSONObject("data").getString("id"));
-                        }
-                        else
-                        {
-                            onAddClothesRequestFailed();
-                        }
-                    }
-                    catch (JSONException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }, error -> {
-            DialogHelper.hideLoading();
-//            onUserHasFailedToAddClothesDetailPart(t);
-            Log.d(TAG, "addClothesDetailPart: " + error);
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-
-                HashMap<String, String> headerHashMap = new HashMap<>();
-                headerHashMap.put("Authorization", "Bearer " + getToken());
-                headerHashMap.put("Content-Type", "application/json");
-                headerHashMap.put("Accept", "application/json");
-
-                return headerHashMap;
-            }
-
-            @Override
-            public String getBodyContentType()
-            {
-                return "application/json";
-            }
-        };
-
-        queue.add(jsonObjectRequest);
-
-    }
-
     private void onAddClothesRequestFailed()
     {
         Log.d(TAG, "onAddClothesRequestFailed: ");
@@ -915,8 +1142,8 @@ public class AddClothesFragment extends Fragment {
     private void onUserHasAddedClothesDetailPart(String clothesId)
     {
         persistIdOfClothesWhichItsDetailPartHasBeenUploaded(clothesId);
-        detailsLayout.setVisibility(View.GONE);
-        imageUploadLayout.setVisibility(View.VISIBLE);
+        generalDetailsScrollView.setVisibility(View.GONE);
+        imageUploadScrollView.setVisibility(View.VISIBLE);
     }
 
     private void persistIdOfClothesWhichItsDetailPartHasBeenUploaded(String clothesId)
@@ -925,19 +1152,6 @@ public class AddClothesFragment extends Fragment {
         MyApplication.getSharedPreferencesManager().persist(USER_HAS_HALF_WAY_UPLOADED_CLOTHES, true);
     }
 
-    private void onUserHasFailedToAddClothesDetailPart
-            (Response<AddClothesResponse> response)
-    {
-        detailsLayout.setVisibility(View.VISIBLE);
-        imageUploadLayout.setVisibility(View.GONE);
-    }
-
-    private void onUserHasFailedToAddClothesDetailPart(Throwable t)
-    {
-        detailsLayout.setVisibility(View.VISIBLE);
-        imageUploadLayout.setVisibility(View.GONE);
-
-    }
 
     private boolean userHasHalfWayUploadedClothes()
     {
@@ -1106,7 +1320,6 @@ public class AddClothesFragment extends Fragment {
     public void uploadokhttp(File file)
     {
 
-//        RequestBody requestBodyid = RequestBody.create(MediaType.parse("multipart/form-data"), id);
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
@@ -1120,10 +1333,13 @@ public class AddClothesFragment extends Fragment {
                 .addInterceptor(logging)
                 .build();
 
-        AsyncTask<String, Void, Void> asyncTask = new AsyncTask<String, Void, Void>() {
+        @SuppressLint("StaticFieldLeak") AsyncTask<String, Void, Void> asyncTask = new AsyncTask<String, Void, Void>() {
             @Override
             protected Void doInBackground(String... strings)
             {
+                ((MainActivity) getActivity()).showLoading();
+
+
                 RequestBody formBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
                         .addFormDataPart("images[]", "image.jpeg",
@@ -1131,23 +1347,33 @@ public class AddClothesFragment extends Fragment {
 //                        .addFormDataPart("_method", "put")
                         .build();
                 okhttp3.Request request = new okhttp3.Request.Builder()
-                        .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijk2ZjkyZWVhZWM0NTQ4ZWQ1NWQzOWNiZDZjNTY1OWU1MWI2ZDViZGJkNjViMDcwYTA3ODExYzg3YmVhNTFjNDhiYjg1NTc4ZDQ0OGIxOTI1In0.eyJhdWQiOiIxIiwianRpIjoiOTZmOTJlZWFlYzQ1NDhlZDU1ZDM5Y2JkNmM1NjU5ZTUxYjZkNWJkYmQ2NWIwNzBhMDc4MTFjODdiZWE1MWM0OGJiODU1NzhkNDQ4YjE5MjUiLCJpYXQiOjE1NDA5MTc2MDUsIm5iZiI6MTU0MDkxNzYwNSwiZXhwIjoxNTcyNDUzNjA1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.p_feRe1Yh0n_z64scsFCJRmbvdmY9JUqwChqanHXueB_Ieddts41MyHD-PJYe96xCDchIE8Q3bnc0rxfFonjlz19jFRe7Hy_f2wbscQ5eStS6kb5ZiRk9qHIeTilBPmPpzRRE5O3rgwvaPpZ_TzrEVyMthyBgFIDxPtH-WY7gGLPYx30vfM75yKw7RvqScsIp2C-D2o4pMi-u9SqadD7EwQUAr-8amQ6uCnQhwJGV_vJZbdHxq2bfCxX4SQkJCaRBO5ke7WZTWc25LoRHgf12YXTHX_-R-Ef_SwUIpQlBKZd4B-IkqSDJZG2fPQMdr2st9Fn83gDp7Gl00r2s_xOYftfIMspD7deDNFUFe-3_lRFkY9t0yZi7M4uePXOsOVJhLbFEOahlx6hzFhPWEUcxEP15HO8clfOg6ThLIo3N0Hfq_fGvR08OKBFf41XZboJjilhy-U6Ucqg73N-CyZtP4kDEoH23RUJ4xomhBrimD7nwvoltDefjh-wOFRiJfPgOZYZWoMWUmjGGMkZqtWTk-Omjtm-qYuIMv7rISwyICY3LboFisc9VZP9NRSOtuQFr8INbBdl9Z7-7oSzkx3QDxG0w2fh69TuWTjkAlbVUbKkpG-CEZ-64XlTIeXNHScOu0lUfb2Wi-PRaz_zujnR8rLJFEiGGywWzPkS9mfEBBA")
-//                        .addHeader("Content-Type", "application/x-www-form-urlencode")
+                        .addHeader("Authorization", "Bearer " + MyApplication.getSharedPreferencesManager().read("token"))
                         .addHeader("Content-Type", "multipart/form-data")
                         .addHeader("Accept", "application/json")
                         .addHeader("cache-control", "no-cache")
                         .addHeader("Connection", "close")
                         .addHeader("User-Agent", "Sharona")
-                        .url(Url.BASE_URL + Url.CLOTHES + "/133").post(formBody).build();
-                try
-                {
-                    okhttp3.Response response = client.newCall(request).execute();
-                    Log.d(TAG, "doInBackground: " + response);
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+                        .url(Url.BASE_URL + Url.CLOTHES + "/" + MyApplication.getSharedPreferencesManager().read(CLOTHES_ID_WHICH_ITS_DETAIL_PART_HAS_BEEN_UPLOADED)).post(formBody).build();
+
+                client.newCall(request).enqueue(new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(okhttp3.Call call, IOException e)
+                    {
+                        ((MainActivity) getActivity()).hideLoading();
+
+                        Log.d(TAG, "onFailure: ");
+                    }
+
+                    @Override
+                    public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException
+                    {
+                        ((MainActivity) getActivity()).hideLoading();
+
+                        Log.d(TAG, "onResponse: ");
+                        AddClothesHelper.AddClothesDTO.numberOfUploadedImages = AddClothesHelper.AddClothesDTO.numberOfUploadedImages + 1;
+                    }
+                });
+
                 return null;
             }
 
@@ -1158,6 +1384,47 @@ public class AddClothesFragment extends Fragment {
 
     }
 
+    public void uploadRetrofit(File file)
+    {
+        Integer id;
+
+        if (MyApplication.getSharedPreferencesManager().read(CLOTHES_ID_WHICH_ITS_DETAIL_PART_HAS_BEEN_UPLOADED) != null &&
+                MyApplication.getSharedPreferencesManager().read(CLOTHES_ID_WHICH_ITS_DETAIL_PART_HAS_BEEN_UPLOADED) instanceof Integer)
+        {
+            id = (Integer) MyApplication.getSharedPreferencesManager().read(CLOTHES_ID_WHICH_ITS_DETAIL_PART_HAS_BEEN_UPLOADED);
+        }
+        else
+        {
+            return;
+        }
+
+        RequestBody formBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("images[]", "image.jpeg",
+                        RequestBody.create(MediaType.parse("multipart/form-data"), file))
+//                        .addFormDataPart("_method", "put")
+                .build();
+
+
+        MultipartBody.Part requestBodyPart = MultipartBody.Part.create(RequestBody.create(MediaType.parse("multipart/form-data"), file));
+
+        Call<UploadClothesInfoPartResponse> imagePartCall = NetworkManager.getInstance().getEndpointApi(Api.class).
+                imagePartOfUploadClothes(formBody, requestBodyPart, (Integer) MyApplication.getSharedPreferencesManager().read(CLOTHES_ID_WHICH_ITS_DETAIL_PART_HAS_BEEN_UPLOADED));
+        imagePartCall.enqueue(new Callback<UploadClothesInfoPartResponse>() {
+            @Override
+            public void onResponse(Call<UploadClothesInfoPartResponse> call, retrofit2.Response<UploadClothesInfoPartResponse> response)
+            {
+                Log.d(TAG, "onResponse: ");
+            }
+
+            @Override
+            public void onFailure(Call<UploadClothesInfoPartResponse> call, Throwable t)
+            {
+                Log.d(TAG, "onFailure: ");
+
+            }
+        });
+    }
 
     @Override
     public void onDestroyView()

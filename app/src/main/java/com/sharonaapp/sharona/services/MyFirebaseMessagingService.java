@@ -19,6 +19,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
 //        sendRegistrationToServer(token);
+
     }
 
     @Override

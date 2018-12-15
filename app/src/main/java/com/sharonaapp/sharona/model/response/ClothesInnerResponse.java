@@ -2,6 +2,7 @@ package com.sharonaapp.sharona.model.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.sharonaapp.sharona.model.general.Clothes;
 
 import java.util.List;
 

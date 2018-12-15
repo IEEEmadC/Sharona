@@ -8,7 +8,6 @@
     android:layout_marginTop="@dimen/margin_small"
     android:orientation="vertical">
 
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/incoming_offer_info_part_layout"
         android:layout_width="match_parent"
@@ -41,29 +40,22 @@
                 tools:text="Item: My Pink Top"/>
 
             <TextView
-                android:id="@+id/incoming_offer_city_text_view"
+                android:id="@+id/incoming_offer_address_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 tools:text="City: Tehran"/>
-
-            <TextView
-                android:id="@+id/incoming_offer_offer_status_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
-                tools:text="Status: "/>
 
         </LinearLayout>
 
 
         <ImageView
             android:id="@+id/incoming_offer_image_view"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="120dp"
             android:adjustViewBounds="true"
             android:maxHeight="120dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -72,10 +64,6 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorPrimaryDark"/>
 
     <LinearLayout
         android:id="@+id/incoming_offer_action_part_layout"
@@ -90,20 +78,33 @@
         app:layout_constraintTop_toBottomOf="@id/incoming_offer_info_part_layout"
         >
 
-        <Button
-            android:id="@+id/incoming_offer_accept_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Accept"/>
+        <!--<Button-->
+        <!--android:id="@+id/incoming_offer_accept_button"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="Accept"/>-->
+
+        <!--<Button-->
+        <!--android:id="@+id/incoming_offer_reject_button"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="Reject"/>-->
 
         <Button
-            android:id="@+id/incoming_offer_reject_button"
-            android:layout_width="0dp"
+            android:id="@+id/incoming_offer_phone_call_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Reject"/>
+            android:text="Call requester"/>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_marginBottom="@dimen/margin_small_x"/>
 
 
 </LinearLayout>

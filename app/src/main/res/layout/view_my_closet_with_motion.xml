@@ -10,17 +10,12 @@
         android:id="@+id/my_closet_image_view"
         android:layout_width="match_parent"
         android:layout_height="240dp"
+        android:background="@drawable/ic_sharona_logo"
+        android:padding="@dimen/margin_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/anim_sharona_logo"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
-        android:id="@+id/my_closet_button"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="fragment test"
-        app:layout_constraintTop_toBottomOf="@id/my_closet_image_view"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_closet_clothes_recycler_view"
@@ -28,7 +23,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/my_closet_button"/>
+        app:layout_constraintTop_toBottomOf="@id/my_closet_image_view"/>
 
 
 </android.support.constraint.motion.MotionLayout>

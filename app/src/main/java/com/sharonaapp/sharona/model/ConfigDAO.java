@@ -10,8 +10,27 @@ public class ConfigDAO {
     ArrayList<String> footwearSizeArrayList;
     ArrayList<String> colorArrayList;
 
+    ArrayList<String> userGenderArrayList;
+    ArrayList<String> clothesGenderArrayList;
+    ArrayList<String> usedStatusArrayList;
+
     public ConfigDAO()
     {
+        userGenderArrayList = new ArrayList<>();
+        userGenderArrayList.add("Female");
+        userGenderArrayList.add("Male");
+        userGenderArrayList.add("Other");
+//        userGenderArrayList.add("Prefer not to say");
+
+        clothesGenderArrayList = new ArrayList<>();
+        clothesGenderArrayList.add("Female");
+        clothesGenderArrayList.add("Male");
+        clothesGenderArrayList.add("Unisex");
+
+        usedStatusArrayList = new ArrayList<>();
+        usedStatusArrayList.add("USED");
+        usedStatusArrayList.add("NEW");
+
     }
 
     public ArrayList<WearingType> getWearingTypesArrayList()
@@ -75,5 +94,20 @@ public class ConfigDAO {
     public void setColorArrayList(ArrayList<String> colorArrayList)
     {
         this.colorArrayList = colorArrayList;
+    }
+
+    public ArrayList<String> getUserGenderArrayList()
+    {
+        return userGenderArrayList;
+    }
+
+    public ArrayList<String> getClothesGenderArrayList()
+    {
+        return clothesGenderArrayList;
+    }
+
+    public ArrayList<String> getUsedStatusArrayList()
+    {
+        return usedStatusArrayList;
     }
 }

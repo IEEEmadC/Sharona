@@ -33,7 +33,7 @@
         android:paddingStart="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/black"
+        android:background="@color/colorPrimaryHalfDark"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <LinearLayout
@@ -72,7 +72,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginBottom="@dimen/margin_small"
-            android:src="@drawable/ic_like"/>
+            android:src="@drawable/ic_like_not_liked_24dp"/>
     </LinearLayout>
 
 

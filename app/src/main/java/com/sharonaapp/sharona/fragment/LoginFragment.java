@@ -2,7 +2,6 @@ package com.sharonaapp.sharona.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,19 +22,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.sharonaapp.sharona.BackButtonClickListenerImpl;
 import com.sharonaapp.sharona.MyApplication;
 import com.sharonaapp.sharona.R;
 import com.sharonaapp.sharona.activity.MainActivity;
 import com.sharonaapp.sharona.manager.LoginLogoutStateManager;
-import com.sharonaapp.sharona.model.LoginRequest;
+import com.sharonaapp.sharona.model.request.GoogleAuthRequest;
 import com.sharonaapp.sharona.model.request.OauthRequest;
+import com.sharonaapp.sharona.model.response.GoogleAuthResponse;
 import com.sharonaapp.sharona.model.response.OauthResponse;
 import com.sharonaapp.sharona.network.Api;
 import com.sharonaapp.sharona.network.NetworkManager;
@@ -95,11 +91,15 @@ public class LoginFragment extends Fragment {
         oauthRequest.setGrantType("password");
         oauthRequest.setUsername(emailEditText.getText().toString());
         oauthRequest.setPassword(passwordEditText.getText().toString());
+        ((MainActivity) getActivity()).showLoading();
+
         Call<OauthResponse> oauthCall = NetworkManager.getInstance().getEndpointApi(Api.class).oauth(oauthRequest);
         oauthCall.enqueue(new Callback<OauthResponse>() {
             @Override
             public void onResponse(Call<OauthResponse> call, Response<OauthResponse> response)
             {
+                ((MainActivity) getActivity()).hideLoading();
+
                 if (response.isSuccessful() && response.body() != null && response.body().getAccessToken() != null)
                 {
                     onUserHasLogedIn(response.body().getAccessToken());
@@ -118,6 +118,8 @@ public class LoginFragment extends Fragment {
             public void onFailure(Call<OauthResponse> call, Throwable t)
             {
                 loginFailed(t);
+                ((MainActivity) getActivity()).hideLoading();
+
             }
         });
 
@@ -141,15 +143,6 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void fillLoginRequestWithMockData(LoginRequest loginRequest)
-    {
-        loginRequest.setUsername("fmmajd@google.com");
-        loginRequest.setPassword("12345678");
-        loginRequest.setClient_id(1);
-        loginRequest.setClient_secret("zcWRDOGvr6jJKhdrc7I1R626mXSg0ORztaNZmpYJ");
-        loginRequest.setGrant_type("password");
-    }
-
     @OnClick(R.id.login_logout_button)
     void logout()
     {
@@ -167,18 +160,16 @@ public class LoginFragment extends Fragment {
 
     private void onUserHasLogedIn(String accessTokenString)
     {
+        Log.d(TAG, "onUserHasLogedIn: SAVED TOKEN" + accessTokenString);
         MyApplication.getSharedPreferencesManager().persist("token", accessTokenString);
         LoginLogoutStateManager.getInstance().setUserLoginLogoutState(Boolean.TRUE);
-//            MyApplication.getSharedPreferencesManager().persist(USERNAME_PERSISTED, loginResponse.get());
-//            MyApplication.getSharedPreferencesManager().persist(EMAIL_PERSISTED, loginResponse.get());
-
-        Log.d(TAG, "onUserHasLogedIn: SAVED TOKEN" + accessTokenString);
-
 
         loginLayout.setVisibility(View.GONE);
         logoutLayout.setVisibility(View.VISIBLE);
 
         setWelcomeMessage();
+
+        MyApplication.handleTokenForNotification(false);
 
 
     }
@@ -216,11 +207,10 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).setOnBackPressedListener(new BackButtonClickListenerImpl(getActivity()));
 
-//        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        doLoginWithGoogle();
+//        doLoginWithGoogle();
 
 
     }
@@ -246,8 +236,6 @@ public class LoginFragment extends Fragment {
     public void onResume()
     {
         super.onResume();
-        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-        new Handler().postDelayed(() -> parentLayout.setVisibility(View.VISIBLE), 600);
 
         if (LoginLogoutStateManager.getInstance().isUserLogedIn())
         {
@@ -265,7 +253,6 @@ public class LoginFragment extends Fragment {
     public void onPause()
     {
         super.onPause();
-        parentLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -292,21 +279,52 @@ public class LoginFragment extends Fragment {
 
     private void authWithGoogle(GoogleSignInAccount account)
     {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        ((MainActivity) getActivity()).showLoading();
+
+        GoogleAuthRequest googleAuthRequest = new GoogleAuthRequest();
+        googleAuthRequest.setGoogleToken(account.getIdToken());
+        googleAuthRequest.setUserEmail(account.getEmail());
+
+        if (emailEditText != null){
+            emailEditText.setText(account.getEmail());
+        }
+
+        NetworkManager.getInstance().getEndpointApi(Api.class).googleOAuth(googleAuthRequest).enqueue(new Callback<GoogleAuthResponse>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task)
+            public void onResponse(Call<GoogleAuthResponse> call, Response<GoogleAuthResponse> response)
             {
-                if (task.isSuccessful())
+                ((MainActivity) getActivity()).hideLoading();
+                if (response.isSuccessful())
                 {
-                    startActivity(new Intent(getContext(), MainActivity.class));
-                    getActivity().finish();
-                }
-                else
-                {
-                    Toast.makeText(getContext(), "Auth Error", Toast.LENGTH_SHORT).show();
+                    if (response.body() != null && response.body().getData() != null)
+                    {
+                        onUserHasLogedIn(response.body().getData().getAccessToken());
+                    }
                 }
             }
+
+            @Override
+            public void onFailure(Call<GoogleAuthResponse> call, Throwable t)
+            {
+
+                ((MainActivity) getActivity()).hideLoading();
+
+
+            }
         });
+
+//
+//        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+//        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
+//            if (task.isSuccessful())
+//            {
+//                startActivity(new Intent(getContext(), MainActivity.class));
+//                getActivity().finish();
+//            }
+//            else
+//            {
+//                Toast.makeText(getContext(), "Auth Error", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }

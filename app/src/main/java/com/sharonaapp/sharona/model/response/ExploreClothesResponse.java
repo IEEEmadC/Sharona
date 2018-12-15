@@ -2,14 +2,17 @@ package com.sharonaapp.sharona.model.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.sharonaapp.sharona.model.general.Clothes;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ExploreClothesResponse {
+public class ExploreClothesResponse implements Serializable {
+
 
     @SerializedName("data")
     @Expose
-    private List<Clothes> clothes = null;
+    private List<com.sharonaapp.sharona.model.general.Clothes> data = null;
     @SerializedName("success")
     @Expose
     private Boolean success;
@@ -21,16 +24,16 @@ public class ExploreClothesResponse {
     private String userMessage;
     @SerializedName("meta")
     @Expose
-    private List<String> meta = null;
+    private List<Object> meta = null;
 
-    public List<Clothes> getClothes()
+    public List<Clothes> getData()
     {
-        return clothes;
+        return data;
     }
 
     public void setData(List<Clothes> data)
     {
-        this.clothes = data;
+        this.data = data;
     }
 
     public Boolean getSuccess()
@@ -63,18 +66,75 @@ public class ExploreClothesResponse {
         this.userMessage = userMessage;
     }
 
-    public List<String> getMeta()
+    public List<Object> getMeta()
     {
         return meta;
     }
 
-    public void setMeta(List<String> meta)
+    public void setMeta(List<Object> meta)
     {
         this.meta = meta;
     }
 
+    public class Image implements Serializable{
 
-    public class SwapCondition {
+        @SerializedName("id")
+        @Expose
+        private Integer id;
+        @SerializedName("name")
+        @Expose
+        private String name;
+        @SerializedName("type")
+        @Expose
+        private String type;
+        @SerializedName("path")
+        @Expose
+        private String path;
+
+        public Integer getId()
+        {
+            return id;
+        }
+
+        public void setId(Integer id)
+        {
+            this.id = id;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+
+        public void setName(String name)
+        {
+            this.name = name;
+        }
+
+        public String getType()
+        {
+            return type;
+        }
+
+        public void setType(String type)
+        {
+            this.type = type;
+        }
+
+        public String getPath()
+        {
+            return path;
+        }
+
+        public void setPath(String path)
+        {
+            this.path = path;
+        }
+
+    }
+
+    public class SwapCondition implements Serializable{
+
         @SerializedName("type")
         @Expose
         private String type;
@@ -127,6 +187,8 @@ public class ExploreClothesResponse {
         {
             this.size = size;
         }
+
     }
+
 }
 

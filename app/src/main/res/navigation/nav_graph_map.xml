@@ -1,0 +1,26 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/mobile_navigation"
+            app:startDestination="@+id/item_map">
+
+    <fragment
+        android:id="@+id/item_map"
+        android:name="com.sharonaapp.sharona.fragment.MapFragment"
+        android:label="f"
+        tools:layout="@layout/view_map"/>
+
+    <fragment
+        android:id="@+id/item_closet"
+        android:name="com.sharonaapp.sharona.fragment.MyClosetFragment"
+        android:label="myclosetf"
+        tools:layout="@layout/view_my_closet_with_motion">
+
+        <!--<action-->
+            <!--android:id="@+id/action_my_closet_to_hell"-->
+            <!--app:destination="@id/itemexploreFragment"/>-->
+
+    </fragment>
+
+
+</navigation>

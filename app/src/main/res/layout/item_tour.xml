@@ -9,6 +9,7 @@
     <ImageView
         android:id="@+id/item_tour_image_view"
         android:layout_width="match_parent"
+        android:scaleType="fitCenter"
         android:layout_height="400dp"/>
 
     <View
@@ -20,7 +21,7 @@
 
     <TextView
         android:id="@+id/item_tour_title_text_view"
-        fontPath="fonts/f1.ttf"
+        fontPath="fonts/myriad_pro_bold.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
@@ -33,7 +34,7 @@
 
     <TextView
         android:id="@+id/item_tour_desc_text_view"
-        fontPath="fonts/f1.ttf"
+        fontPath="fonts/myriad_pro_bold.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"

@@ -1,6 +1,5 @@
 package com.sharonaapp.sharona.fragment;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,23 +11,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.sharonaapp.sharona.BackButtonClickListenerImpl;
-import com.sharonaapp.sharona.MyModel;
 import com.sharonaapp.sharona.R;
-import com.sharonaapp.sharona.ShortcutHelper;
 import com.sharonaapp.sharona.activity.MainActivity;
 import com.sharonaapp.sharona.adapter.IncomingOfferAdapter;
 import com.sharonaapp.sharona.adapter.OutgoingOfferAdapter;
-import com.sharonaapp.sharona.adapter.TransactionsAdapter;
+import com.sharonaapp.sharona.manager.LoginLogoutStateManager;
 import com.sharonaapp.sharona.model.IncomingOfferResponse;
-import com.sharonaapp.sharona.model.IncomingOfferResponse.IncomingOfferResponseData;
 import com.sharonaapp.sharona.model.OutgoingOfferResponse;
-import com.sharonaapp.sharona.model.Transaction;
 import com.sharonaapp.sharona.network.Api;
 import com.sharonaapp.sharona.network.NetworkManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,8 +43,11 @@ public class InboxOutboxFragment extends Fragment {
     RecyclerView inboxRecyclerView;
     @BindView(R.id.inbox_outbox_outbox_recycler_view)
     RecyclerView outboxRecyclerView;
-    @BindView(R.id.inbox_outbox_transactions_recycler_view)
-    RecyclerView transactionsRecyclerView;
+
+    @BindView(R.id.inbox_outbox_inbox_message_text_view)
+    TextView inboxEmptyMessageTextView;
+    @BindView(R.id.inbox_outbox_outbox_message_text_view)
+    TextView outboxEmptyMessageTextView;
 
     @BindView(R.id.inbox_outbox_selecting_inbox_text_view)
     TextView inboxTextView;
@@ -58,16 +55,17 @@ public class InboxOutboxFragment extends Fragment {
     TextView outboxTextView;
     @BindView(R.id.inbox_outbox_selecting_transaction_text_view)
     TextView transactionTextView;
-    private Resources resourcesForApplication;
 
     @OnClick(R.id.inbox_outbox_selecting_inbox_text_view)
     void inboxClicked()
     {
         inboxRecyclerView.setVisibility(View.VISIBLE);
         outboxRecyclerView.setVisibility(View.GONE);
-        transactionsRecyclerView.setVisibility(View.GONE);
+        outboxEmptyMessageTextView.setVisibility(View.GONE);
         inboxTextView.setTextColor(getResources().getColor(R.color.textOnPrimaryColor));
         outboxTextView.setTextColor(getResources().getColor(R.color.inactive));
+
+        fetchInbox();
     }
 
     @OnClick(R.id.inbox_outbox_selecting_outbox_text_view)
@@ -75,9 +73,11 @@ public class InboxOutboxFragment extends Fragment {
     {
         inboxRecyclerView.setVisibility(View.GONE);
         outboxRecyclerView.setVisibility(View.VISIBLE);
-        transactionsRecyclerView.setVisibility(View.GONE);
-        inboxTextView.setTextColor(getResources().getColor(R.color.textOnPrimaryColor));
-        outboxTextView.setTextColor(getResources().getColor(R.color.inactive));
+        inboxEmptyMessageTextView.setVisibility(View.GONE);
+        outboxTextView.setTextColor(getResources().getColor(R.color.textOnPrimaryColor));
+        inboxTextView.setTextColor(getResources().getColor(R.color.inactive));
+
+        fetchOutbox();
     }
 
     @Nullable
@@ -93,109 +93,118 @@ public class InboxOutboxFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        ((MainActivity) getActivity()).setOnBackPressedListener(new BackButtonClickListenerImpl(getActivity()));
 
 
-//        initInboxWithMockData(view);
-//        initTransactionWithMockData(view);
-//
-//        fetchOutbox();
-//
-//        inboxClicked();
+        if (LoginLogoutStateManager.getInstance().isUserLogedIn())
+        {
+            inboxClicked();
+        }
+        else
+        {
+            Toast.makeText(getContext(), "Please Login or Sign up first!", Toast.LENGTH_SHORT).show();
+            ((MainActivity) getActivity()).routeToLoginFragment();
+        }
 
-        MyModel myModel = new MyModel();
-        myModel.setFirstString("first string");
-        myModel.setSecondString("second string");
-        myModel.setId(101);
-        myModel.setName("name str");
 
-        ShortcutHelper shortcutHelper = new ShortcutHelper(getActivity());
-//        shortcutHelper.createHomescreenShortcut(myModel);
-        shortcutHelper.addShortcut();
+    }
 
+    private void fetchInbox()
+    {
+        ((MainActivity) getActivity()).showLoading();
+        Call<IncomingOfferResponse> outboxCall = NetworkManager.getInstance().getEndpointApi(Api.class).inbox();
+        outboxCall.enqueue(new Callback<IncomingOfferResponse>() {
+            @Override
+            public void onResponse(Call<IncomingOfferResponse> call, Response<IncomingOfferResponse> response)
+            {
+                Log.d(TAG, "onResponse: " + response);
+                ((MainActivity) getActivity()).hideLoading();
+
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    displayInboxOffers(response.body().getData());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IncomingOfferResponse> call, Throwable t)
+            {
+                ((MainActivity) getActivity()).hideLoading();
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void displayInboxOffers(List<IncomingOfferResponse.IncomingOffer> incomingOffers)
+    {
+
+        if (incomingOffers == null)
+        {
+            return;
+        }
+
+        if (incomingOffers.size() == 0)
+        {
+            inboxEmptyMessageTextView.setVisibility(View.VISIBLE);
+            inboxRecyclerView.setVisibility(View.GONE);
+        }
+        else
+        {
+            inboxRecyclerView.setVisibility(View.VISIBLE);
+            inboxEmptyMessageTextView.setVisibility(View.GONE);
+
+
+            IncomingOfferAdapter incomingOfferAdapter = new IncomingOfferAdapter(incomingOffers);
+            inboxRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            inboxRecyclerView.setAdapter(incomingOfferAdapter);
+        }
 
     }
 
     private void fetchOutbox()
     {
+        ((MainActivity) getActivity()).showLoading();
         Call<OutgoingOfferResponse> outboxCall = NetworkManager.getInstance().getEndpointApi(Api.class).outbox();
         outboxCall.enqueue(new Callback<OutgoingOfferResponse>() {
             @Override
             public void onResponse(Call<OutgoingOfferResponse> call, Response<OutgoingOfferResponse> response)
             {
                 Log.d(TAG, "onResponse: " + response);
+                ((MainActivity) getActivity()).hideLoading();
                 if (response.isSuccessful() && response.body() != null)
                 {
                     displayOutboxRequests(response.body().getData());
-
-                }
-                else
-                {
-
                 }
             }
 
             @Override
             public void onFailure(Call<OutgoingOfferResponse> call, Throwable t)
             {
-
                 Log.d(TAG, "onFailure: " + t.getMessage());
+                ((MainActivity) getActivity()).hideLoading();
             }
         });
     }
 
     private void displayOutboxRequests(List<OutgoingOfferResponse.OutgoingOfferResponseData> outgoingOfferResponseData)
     {
-        outboxRecyclerView.setLayoutManager(new LinearLayoutManager(getView().getContext()));
-        outboxRecyclerView.setAdapter(new OutgoingOfferAdapter(outgoingOfferResponseData));
-    }
-
-    private void initInboxWithMockData(@NonNull View view)
-    {
-        IncomingOfferResponse incomingOfferResponse = new IncomingOfferResponse();
-
-        List<IncomingOfferResponseData> incomingOffers = new ArrayList<>();
-        for (int i = 0; i < 20; i++)
+        if (outgoingOfferResponseData == null)
         {
-            IncomingOfferResponse tempIncomingOfferResponse = new IncomingOfferResponse();
-            IncomingOfferResponseData incomingOfferResponseData = tempIncomingOfferResponse.new IncomingOfferResponseData();
-
-//            incomingOfferResponseData.add("InboxId_" + i);
-            incomingOfferResponseData.setType("Sale");
-//            incomingOfferResponseData.("Item #" + i);
-//            incomingOfferResponseData.clsetClothesType("Type " + i);
-            incomingOffers.add(incomingOfferResponseData);
-            incomingOfferResponse.setData(incomingOffers);
-
+            return;
         }
-
-        inboxRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        inboxRecyclerView.setAdapter(new IncomingOfferAdapter((incomingOffers)));
-    }
-
-    private void initTransactionWithMockData(View view)
-    {
-        ArrayList<Transaction> transactions = new ArrayList<>();
-        for (int i = 0; i < 20; i++)
+        if (outgoingOfferResponseData.size() == 0)
         {
-            Transaction transaction = new Transaction();
-            transaction.setId(i + "id");
-            transaction.setType(i + "type");
-            transaction.setAmount(i * 200 + " $");
-            transaction.setState("PENDING");
-            transaction.setUserDealingWith("userDealingWith " + i);
-
-            transactions.add(transaction);
+            outboxEmptyMessageTextView.setVisibility(View.VISIBLE);
+            outboxRecyclerView.setVisibility(View.GONE);
         }
+        else
+        {
+            outboxRecyclerView.setVisibility(View.VISIBLE);
+            outboxEmptyMessageTextView.setVisibility(View.GONE);
 
-        transactionsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        transactionsRecyclerView.setAdapter(new TransactionsAdapter(transactions));
+            outboxRecyclerView.setLayoutManager(new LinearLayoutManager(getView().getContext()));
+            outboxRecyclerView.setAdapter(new OutgoingOfferAdapter(outgoingOfferResponseData));
+        }
     }
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-    }
 }

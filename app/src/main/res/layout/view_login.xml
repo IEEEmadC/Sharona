@@ -25,17 +25,20 @@
             android:id="@+id/login_logout_welcome_message_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_medium"
             android:gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_small"
             android:text="Logout ?"/>
 
         <Button
             android:id="@+id/login_logout_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:text="Logout"/>
 
     </LinearLayout>
@@ -48,6 +51,14 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login with Sharona:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="start"/>
+
 
         <EditText
             android:id="@+id/login_email_edit_text"
@@ -55,6 +66,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/your_email"
             android:inputType="textEmailAddress"
+            android:layout_marginTop="@dimen/margin_medium"
             android:maxLines="1"/>
 
         <EditText
@@ -67,6 +79,7 @@
 
         <Button
             android:id="@+id/login_login_button"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"/>
@@ -74,13 +87,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/margin_large"
             android:text="Don't have an account?"/>
 
         <TextView
             android:id="@+id/login_sign_up_instead_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
             android:text="Create one here!"
             android:textColor="@android:color/holo_blue_dark"/>
 
@@ -88,15 +102,25 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/margin_large"
-            android:layout_marginBottom="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large_x"
+            android:layout_marginBottom="@dimen/margin_large_x"
             android:background="@color/colorSecondaryDark"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login with Google:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="start"/>
 
 
         <Button
             android:id="@+id/login_login_with_google_button"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
             android:text="Login with Google"/>
 
     </LinearLayout>
